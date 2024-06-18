@@ -1,8 +1,13 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-
+# from django.http import HttpResponse
+from rest_framework import generics
+from .serializers import RoomSerializer
+from .models import Room
 
 # Create your views here.
-def main(request):
-    return HttpResponse("Hello")
-/Users/arielle/Desktop/audioGPT/audio_gpt/manage.py
+# def main(request):
+#     return HttpResponse("Arielle")
+
+class RoomView(generics.CreateAPIView):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
