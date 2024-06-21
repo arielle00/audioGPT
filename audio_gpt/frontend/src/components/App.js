@@ -1,5 +1,8 @@
 import React, {Component} from "react";
 import {render} from "react-dom"
+import HomePage from "./HomePage";
+import RoomJoinPage from "./RoomJoinPage";
+import CreateRoom from "./CreateRoom";
 
 
 export default class App extends Component{
@@ -8,9 +11,13 @@ export default class App extends Component{
     }
 
     render(){
-        return <h1>Testing</h1>
+        
+        return (<div>
+            <HomePage></HomePage>
+            </div>
+        );
     }
 }
 
 const appDiv = document.getElementById("app");
-render(<App />, appDiv);
+render(<App name="arielle"/>, appDiv);
