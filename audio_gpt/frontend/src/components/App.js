@@ -1,8 +1,7 @@
 import React, {Component} from "react";
-import {render} from "react-dom"
+// import {render} from "react-dom";
 import HomePage from "./HomePage";
-import RoomJoinPage from "./RoomJoinPage";
-import CreateRoom from "./CreateRoom";
+import { createRoot } from 'react-dom/client';
 
 
 export default class App extends Component{
@@ -11,13 +10,12 @@ export default class App extends Component{
     }
 
     render(){
-        
         return (<div>
             <HomePage></HomePage>
             </div>
         );
     }
 }
-
-const appDiv = document.getElementById("app");
-render(<App name="arielle"/>, appDiv);
+const container = document.getElementById('app');
+const root = createRoot(container);
+root.render(<App tab="home" />);
