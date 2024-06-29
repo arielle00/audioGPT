@@ -1,32 +1,26 @@
-import React from "react";
-// import HomePage from "./HomePage";
-// import { createRoot } from 'react-dom/client';
-// const App = () => {
-//   return (
-//     <div>
-//       <HomePage />
-//     </div>
-//   );
-// };
-// const container = document.getElementById('app');
-// const root = createRoot(container);
-// root.render(<App tab="home" />);
-
-import TestHomePage from "./testHomePage.js";
-import RoomJoinPage from "./RoomJoinPage";
-import CreateRoomPage from "./CreateRoomPage";
-import Room from "./Room";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import React from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import TestHomePage from './TestHomePage';
+import RoomJoinPage from './RoomJoinPage';
+import CreateRoomPage from './CreateRoomPage';
+import Room from './Room';
+import Layout from './Layout'; // Import the Layout component
 
 const router = createBrowserRouter([
-    {path: '/', element: <TestHomePage/>},
-    {path: '/join', element: <RoomJoinPage/>},
-    {path: '/create', element: <CreateRoomPage/>},
-    {path: '/room/:roomCode', element: <Room/>}
+  {
+    path: '/',
+    element: React.createElement(Layout),
+    children: [
+      { path: '/', element: React.createElement(TestHomePage) },
+      { path: 'join', element: React.createElement(RoomJoinPage) },
+      { path: 'create', element: React.createElement(CreateRoomPage) },
+      { path: 'room/:roomCode', element: React.createElement(Room) },
+    ],
+  },
 ]);
 
-function App() {
-    return <RouterProvider router={router}/>
-}
+const App = () => {
+  return React.createElement(RouterProvider, { router: router });
+};
 
-export default App
+export default App;
