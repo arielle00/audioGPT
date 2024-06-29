@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import './testHomePage.css'
 
 function TestHomePage() {
   const [file, setFile] = useState(null);
@@ -31,7 +32,7 @@ function TestHomePage() {
       }
     })
     .then(res => {
-      setMsg("Upload Successful");
+      setMsg("Upload successful");
       console.log(res.data);
     })
     .catch(err => {
