@@ -1,12 +1,16 @@
 from django.shortcuts import render
 # from django.http import HttpResponse
 from rest_framework import generics, status
-from .serializers import RoomSerializer, CreateRoomSerializer
+from .serializers import RoomSerializer, CreateRoomSerializer, FileSerializer
 from .models import Room
+from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
+import assemblyai as aai
+from dotenv import load_dotenv
+import os
 
-
+load_dotenv()
 class GetRoom(APIView):
     serializer_class = RoomSerializer
     lookup_url_kwarg = 'code'
@@ -26,6 +30,34 @@ class GetRoom(APIView):
 class RoomView(generics.CreateAPIView):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
+
+class AudioFileView(APIView):
+    serializer_class = FileSerializer
+    def post(self, request, format=None):
+        data = request.data.copy()
+        audiofile = request.FILES['audio_file']
+        print("-----" + str(audiofile))
+        serializer = self.serializer_class(data=request.data)
+        #print(serializer.data)
+        data.update(request.FILES)
+        print(serializer.is_valid())
+        if serializer.is_valid():
+            audio_name = data.get('audio_name')
+            audio_file = data.get('audio_file')
+            print(audio_name)
+            
+
+            aai.settings.api_key = os.getenv('ASSEMBLYAI_API_KEY')
+            transcriber = aai.Transcriber()
+
+            transcript = transcriber.transcribe(audio_file)
+            # transcript = transcriber.transcribe("./my-local-audio-file.wav")
+
+            print(transcript.text)
+            print(type(audio_file))
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
 
 class CreateRoomView(APIView):
     serializer_class = CreateRoomSerializer

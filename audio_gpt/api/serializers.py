@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Room
+from .models import Room, FileSave
 
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,3 +12,8 @@ class CreateRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = ('guest_can_pause', 'votes_to_skip')
+
+class FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FileSave
+        fields = ('audio_name', 'audio_file')

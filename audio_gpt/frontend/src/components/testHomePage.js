@@ -6,6 +6,7 @@ function TestHomePage() {
   const [file, setFile] = useState(null);
   const [progress, setProgress] = useState({ started: false, pc: 0 });
   const [msg, setMsg] = useState(null);
+  const audioName = "my_audio";
 
   function handleUpload() {
     if (!file) {
@@ -14,21 +15,23 @@ function TestHomePage() {
     }
 
     const fd = new FormData();
-    fd.append('file', file);
+    fd.append('audio_file', file);
+    fd.append('audio_name', audioName);
 
     setMsg("Uploading...");
     setProgress((prevState) => {
       return { ...prevState, started: true };
     });
 
-    axios.post('http://httpbin.org/post', fd, {
+
+    axios.post('/api/add-audio', fd, {
       onUploadProgress: (progressEvent) => {
         const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
         setProgress({ started: true, pc: percentCompleted });
         console.log(percentCompleted);
       },
       headers: {
-        "Custom-Header": "value",
+        "Content-Type": "multipart/form-data",
       }
     })
     .then(res => {

@@ -18,4 +18,8 @@ class Room(models.Model):
     votes_to_skip = models.IntegerField(null=False, default=1)
     created_at = models.DateTimeField(auto_now_add=True)
 
+class FileSave(models.Model):
+    audio_name = models.CharField(max_length=50)
+    audio_file = models.FileField(upload_to="audio_files/")
+
     
