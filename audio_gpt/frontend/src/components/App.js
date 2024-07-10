@@ -4,6 +4,7 @@ import TestHomePage from './testHomePage';
 import RoomJoinPage from './RoomJoinPage';
 import CreateRoomPage from './CreateRoomPage';
 import Room from './Room';
+import Chat from './Chat';
 import Layout from './Layout'; // Import the Layout component
 
 const router = createBrowserRouter([
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
       { path: 'join', element: React.createElement(RoomJoinPage) },
       { path: 'create', element: React.createElement(CreateRoomPage) },
       { path: 'room/:roomCode', element: React.createElement(Room) },
+      { path: 'chat/', element: React.createElement(Chat) },
     ],
   },
 ]);
