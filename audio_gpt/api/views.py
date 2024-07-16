@@ -6,20 +6,21 @@ from .models import Room
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
+import openai
 import assemblyai as aai
 from dotenv import load_dotenv
 import os
 import os
 from decouple import config
-os.environ['LANGCHAIN_TRACING_V2'] = 'true'
-os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
-
+#os.environ['LANGCHAIN_TRACING_V2'] = 'true'
+#os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
+openai.api_key = settings.OPENAI_API_KEY
 langchain_api_key = os.getenv('LANGCHAIN_API_KEY', 'default_langchain_key')
-openai_api_key = os.getenv('OPENAI_API_KEY', 'default_openai_key')
+#openai_api_key = os.getenv('OPENAI_API_KEY', 'default_openai_key')
 
 # Set the environment variables explicitly
 os.environ['LANGCHAIN_API_KEY'] = langchain_api_key
-os.environ['OPENAI_API_KEY'] = openai_api_key
+#os.environ['OPENAI_API_KEY'] = openai_api_key
 
 import bs4
 from langchain import hub
@@ -74,6 +75,7 @@ class AudioFileView(APIView):
             transcriber = aai.Transcriber()
 
             transcript = transcriber.transcribe(audio_file)
+            print(transcript.text)
             # transcript = transcriber.transcribe("./my-local-audio-file.wav")
 
             class StringDocumentLoader(BaseLoader):
@@ -85,7 +87,8 @@ class AudioFileView(APIView):
                     return [Document(page_content=self.text)]
 
             # Example usage
-            loader = StringDocumentLoader(transcript.text)
+            text = "Go, a statically typed compiled language often described as c for the 21st century. It's a popular choice for high performance server side applications, and is the language"
+            loader = StringDocumentLoader(text)
             documents = loader.load()
 
             print(documents)
@@ -105,8 +108,8 @@ class AudioFileView(APIView):
 
             connection = connection = "postgresql+psycopg://postgres:audiogptpassword@database-1.clkkawesqj10.us-east-1.rds.amazonaws.com:5432/postgres"
             COLLECTION_NAME = "GO_COLLECTION"
-            db = PGVector(embeddings=embeddings, documents=splits, collection_name=COLLECTION_NAME, connection=connection,use_jsonb=True)
-
+            db = PGVector(embeddings=embeddings, collection_name=COLLECTION_NAME, connection=connection, use_jsonb=True)
+            db.add_documents(splits)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
