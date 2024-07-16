@@ -9,6 +9,22 @@ from rest_framework.response import Response
 import assemblyai as aai
 from dotenv import load_dotenv
 import os
+import os
+os.environ['LANGCHAIN_TRACING_V2'] = 'true'
+os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
+os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
+os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
+import bs4
+from langchain import hub
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import WebBaseLoader
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+import assemblyai as aai
+from langchain_postgres.vectorstores import PGVector
+from langchain_core.document_loaders import BaseLoader
+from langchain.schema import Document
 
 load_dotenv()
 class GetRoom(APIView):
@@ -53,8 +69,38 @@ class AudioFileView(APIView):
             transcript = transcriber.transcribe(audio_file)
             # transcript = transcriber.transcribe("./my-local-audio-file.wav")
 
-            print(transcript.text)
-            print(type(audio_file))
+            class StringDocumentLoader(BaseLoader):
+                def __init__(self, text: str):
+                    self.text = text
+
+                def load(self):
+                    # Create a single Document from the string
+                    return [Document(page_content=self.text)]
+
+            # Example usage
+            loader = StringDocumentLoader(transcript.text)
+            documents = loader.load()
+
+            print(documents)
+
+            docs = loader.load()
+            text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+            splits = text_splitter.split_documents(docs)
+
+            print(len(splits))
+
+            embeddings = OpenAIEmbeddings()
+            vector = embeddings.embed_query("Hi my name is Manan")
+
+            doc_vectors = embeddings.embed_documents([t.page_content for t in splits])
+
+            print(len(doc_vectors))
+
+            connection = connection = "postgresql+psycopg://postgres:audiogptpassword@database-1.clkkawesqj10.us-east-1.rds.amazonaws.com:5432/postgres"
+            COLLECTION_NAME = "GO_COLLECTION"
+            db = PGVector(embeddings=embeddings, documents=splits, collection_name=COLLECTION_NAME, connection=connection,use_jsonb=True)
+
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
