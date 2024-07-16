@@ -10,10 +10,17 @@ import assemblyai as aai
 from dotenv import load_dotenv
 import os
 import os
+from decouple import config
 os.environ['LANGCHAIN_TRACING_V2'] = 'true'
 os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
-os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
-os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
+
+langchain_api_key = os.getenv('LANGCHAIN_API_KEY', 'default_langchain_key')
+openai_api_key = os.getenv('OPENAI_API_KEY', 'default_openai_key')
+
+# Set the environment variables explicitly
+os.environ['LANGCHAIN_API_KEY'] = langchain_api_key
+os.environ['OPENAI_API_KEY'] = openai_api_key
+
 import bs4
 from langchain import hub
 from langchain.text_splitter import RecursiveCharacterTextSplitter
