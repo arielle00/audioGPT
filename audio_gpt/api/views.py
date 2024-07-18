@@ -112,7 +112,7 @@ class AudioFileView(APIView):
             # print(len(doc_vectors))
 
             connection = get_postgresql_connection_string()
-            COLLECTION_NAME = "GO_COLLECTION"
+            COLLECTION_NAME = audio_name
             db = PGVector(embeddings=embeddings, collection_name=COLLECTION_NAME, connection=connection, use_jsonb=True)
             db.add_documents(splits)
 
