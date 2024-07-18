@@ -57,7 +57,12 @@ class RoomView(generics.CreateAPIView):
 
 class AudioFileView(APIView):
     serializer_class = FileSerializer
+
+    
     def post(self, request, format=None):
+        def get_postgresql_connection_string():
+            db_settings = settings.DATABASES['default']
+            return f"postgresql+psycopg2://{db_settings['USER']}:{db_settings['PASSWORD']}@{db_settings['HOST']}:{db_settings['PORT']}/{db_settings['NAME']}"
         data = request.data.copy()
         audiofile = request.FILES['audio_file']
         print("-----" + str(audiofile))
@@ -100,13 +105,13 @@ class AudioFileView(APIView):
             print(len(splits))
 
             embeddings = OpenAIEmbeddings()
-            vector = embeddings.embed_query("Hi my name is Manan")
+            # vector = embeddings.embed_query("Hi my name is Manan")
 
-            doc_vectors = embeddings.embed_documents([t.page_content for t in splits])
+            # doc_vectors = embeddings.embed_documents([t.page_content for t in splits])
 
-            print(len(doc_vectors))
+            # print(len(doc_vectors))
 
-            connection = connection = "postgresql+psycopg://postgres:audiogptpassword@database-1.clkkawesqj10.us-east-1.rds.amazonaws.com:5432/postgres"
+            connection = get_postgresql_connection_string()
             COLLECTION_NAME = "GO_COLLECTION"
             db = PGVector(embeddings=embeddings, collection_name=COLLECTION_NAME, connection=connection, use_jsonb=True)
             db.add_documents(splits)
