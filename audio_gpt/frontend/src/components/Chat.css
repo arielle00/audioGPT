@@ -1,0 +1,32 @@
+.Chat {
+    display: grid;
+    grid-template-columns: auto 200px;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: white;
+  }
+  
+  .Column {
+    color: white;
+  }
+  
+  .Title {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    color: black;
+    background-color: lightblue;
+  }
+  
+  .Content {
+    height: calc(100vh - 400px);
+    overflow-y: scroll;
+    margin-bottom: 20px;
+  }
+  
+  ::-webkit-scrollbar {
+    display: none;
+  }

@@ -1,0 +1,32 @@
+.wrapper {
+    display: grid;
+    grid-template-columns: auto 200px;
+    height: 60px;
+    border-radius: 10px;
+    background-color: #323236;
+    /* max-width: 1000px; */
+    width: 25px;
+    /* color: red; */
+  }
+  
+  .text {
+    border: none;
+    outline: none;
+    background: none;
+    padding: 20px;
+    color: white;
+    font-size: 26px;
+  }
+  
+  .btn {
+    border: none;
+    border-radius: 10px 10px 10px 10px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: red;
+  }
+  
+  .btn:hover {
+    cursor: pointer;
+    background-color: a8a8a8(200, 253, 130);
+  }
