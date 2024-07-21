@@ -147,5 +147,8 @@ class CreateRoomView(APIView):
 
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
 
-
-# 
+class MessageView(APIView):
+    def post(self, request, format=None):
+        data=request.data
+        print(data.get('input'))
+        return Response(status=status.HTTP_200_OK)
