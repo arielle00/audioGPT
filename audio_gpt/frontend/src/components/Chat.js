@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from "react";
-import bot from "/Users/arielle/Desktop/audioGPT/audio_gpt/frontend/static/images/bot.png";
-import user from "/Users/arielle/Desktop/audioGPT/audio_gpt/frontend/static/images/user.png";
+import bot from "../../static/frontend/static/images/bot.png";
+import user from "../../static/frontend/static/images/user.png";
 
 // import Message from "./chat_components/Message";
 // import Input from "./chat_components/Input";
