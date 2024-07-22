@@ -10,7 +10,8 @@ import user from "../../static/frontend/static/images/user.png";
 import "./Chat.css";
 
 const Message = ({ role, content }) => (
-  <div className={`p-2 rounded-lg ${role === 'user' ? 'bg-blue-500 text-white m-5' : 'bg-gray-200 m-5'}`}>
+  <div className={`flex flex-row p-2 rounded-lg ${role === 'user' ? 'bg-blue-500 text-white m-5' : 'bg-gray-200 m-5'}`}>
+    <img src={role === 'user' ? user : bot} alt="Message" className="w-10 h-10 mr-3 rounded-full" />
     <p>{content}</p>
   </div>
 );
@@ -59,7 +60,7 @@ export default function Chat() {
   const handleSubmit = async () => {
     // Your form submission logic here
     console.log('Input submitted:', input);
-    const newMessage = { id: messages.length + 1, text: input };
+    const newMessage = { role:"user", id: messages.length + 1, text: input };
     addMessage(newMessage)
     
     try {
