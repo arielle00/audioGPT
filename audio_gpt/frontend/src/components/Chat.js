@@ -92,7 +92,7 @@ export default function Chat() {
    
     <div>
       <div className=" justify-center flex inset-0 space-x-4 p-4 items-center bg-gray-200 h-10/10">
-        <div className=" center flex flex-col bg-white rounded-lg shadow-md p-4 w-3/4 h-[650px]">
+        <div className=" center flex flex-col bg-white rounded-lg shadow-md p-4 w-3/4 h-[80vh]">
           <h3 className="text-lg font-semibold mb-4">Chat Messages</h3>
           <div className="overflow-y-auto flex-1 overflow-y-auto mb-4">
             {messages.map((el, i) => {
