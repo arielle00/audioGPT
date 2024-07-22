@@ -45,7 +45,7 @@ function TestHomePage() {
   }
 
   return (
-    <div className="p-8 bg-white rounded-lg shadow-md">
+    <div className="p-8 bg-white rounded-lg shadow-md h-screen">
       <h1 className="text-2xl font-bold mb-4">Uploading files</h1>
       <input
         className="mb-4 p-2 border border-gray-300 rounded-lg"
