@@ -7,7 +7,7 @@ import user from "../../static/frontend/static/images/user.png";
 // import Input from "./chat_components/Input";
 // import History from "./chat_components/History";
 // import Clear from "./chat_components/Clear";
-import "./Chat.css";
+// import "./Chat.css";
 
 const Message = ({ role, content }) => (
   <div className={`flex flex-row p-2 rounded-lg ${role === 'user' ? 'bg-blue-500 text-white m-5' : 'bg-gray-200 m-5'}`}>
@@ -33,11 +33,11 @@ const Input = ({ value, onChange, onClick, className }) => (
   </div>
 );
 
-const History = ({ question, onClick }) => (
-  <div onClick={onClick} className="p-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200">
-    <p>{question}</p>
-  </div>
-);
+// const History = ({ question, onClick }) => (
+//   <div onClick={onClick} className="p-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200">
+//     <p>{question}</p>
+//   </div>
+// );
 
 const Clear = ({ onClick, className }) => (
   <button
@@ -90,11 +90,11 @@ export default function Chat() {
 
   return (
    
-    <div>
-      <div className=" justify-center flex inset-0 space-x-4 p-4 items-center bg-gray-200 h-10/10">
-        <div className=" center flex flex-col bg-white rounded-lg shadow-md p-4 w-3/4 h-[80vh]">
+    
+      <div className="justify-center flex items-center bg-blue-200 h-screen">
+        <div className="flex flex-col bg-white rounded-lg shadow-md p-4 w-3/4 h-[85vh]">
           <h3 className="text-lg font-semibold mb-4">Chat Messages</h3>
-          <div className="overflow-y-auto flex-1 overflow-y-auto mb-4">
+          <div className="overflow-y-auto flex-1 mb-4">
             {messages.map((el, i) => {
               return <Message key={i} role={el.role} content={el.text} />;
             })}
@@ -107,67 +107,7 @@ export default function Chat() {
           />
            <Clear onClick={clear_chat} className="mt-4" />
         </div>
-        {/* <div className="flex-1 flex flex-col bg-white rounded-lg shadow-md p-4">
-          <h3 className="text-lg font-semibold mb-4">History</h3>
-          <div className="flex-1 overflow-y-auto mb-4">
-            {history.map((el, i) => {
-              return (
-                <History
-                  key={i}
-                  question={el.question}
-                  onClick={() =>
-                    setMessages([
-                      { role: 'user', content: history[i].question },
-                      { role: 'assistant', content: history[i].answer },
-                    ])
-                  }
-                />
-              );
-            })}
-          </div>
-          <Clear onClick={clear_chat} className="mt-4" />
-        </div> */}
       </div>
-    </div>
-  
-
-    // <div>Whatever dude</div>
-    // <div className="Chat">
-    //   <div className="Column">
-    //     <h3 className="Title">Chat Messages</h3>
-    //     <div className="Content">
-    //       {messages.map((el, i) => {
-    //         return <Message key={i} role={el.role} content={el.text} />;
-    //       })}
-    //     </div>
-    //     <Input
-    //       value={input}
-    //       onChange={(e) => setInput(e.target.value)}
-    //       onClick={input ? handleSubmit : undefined}
-
-    //     />
-
-    //   </div>
-    //   <div className="Column">
-    //     <h3 className="Title">History</h3>
-    //     <div className="Content">
-    //       {history.map((el, i) => {
-    //         return (
-    //           <History
-    //             key={i}
-    //             question={el.question}
-    //             onClick={() =>
-    //               setMessages([
-    //                 { role: "user", content: history[i].question },
-    //                 { role: "assistant", content: history[i].answer },
-    //               ])
-    //             }
-    //           />
-    //         );
-    //       })}
-    //     </div>
-    //     <Clear onClick={clear_chat} />
-    //   </div>
-    // </div>
+    
   );
 }
