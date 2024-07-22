@@ -11,7 +11,7 @@ import "./Chat.css";
 
 const Message = ({ role, content }) => (
   <div className="flex flex-row">
-    <img src={role === 'user' ? user : bot} alt="Message" className="w-10 h-10 mr-3 rounded-full border border-2 border-gray-700" />
+    <img src={role === 'user' ? user : bot} alt="Message" className="w-8 h-8 mr-3 rounded-full border border-2 border-gray-700" />
     <div className={`p-2 rounded-lg max-w-xl break-words ${role === 'user' ? 'bg-blue-500 text-white mt-0 ml-2 mr-5 mb-5' : 'bg-gray-200 m-5'}`}>
       <p>{content}</p>
     </div>

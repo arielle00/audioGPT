@@ -45,12 +45,21 @@ function TestHomePage() {
   }
 
   return (
-    <div className="Button">
-      <h1> Uploading files </h1>
-      <input onChange={(e) => { setFile(e.target.files[0]) }} type="file" />
-      <button onClick={handleUpload}> Upload</button>
-      {msg && <p>{msg}</p>}
-      {progress.started && <p>Progress: {progress.pc}%</p>}
+    <div className="p-8 bg-white rounded-lg shadow-md">
+      <h1 className="text-2xl font-bold mb-4">Uploading files</h1>
+      <input
+        className="mb-4 p-2 border border-gray-300 rounded-lg"
+        onChange={(e) => { setFile(e.target.files[0]) }}
+        type="file"
+      />
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+        onClick={handleUpload}
+      >
+        Upload
+      </button>
+      {msg && <p className="mt-4 text-green-600">{msg}</p>}
+      {progress.started && <p className="mt-2">Progress: {progress.pc}%</p>}
     </div>
   );
 }
