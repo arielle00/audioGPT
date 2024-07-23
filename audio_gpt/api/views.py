@@ -6,18 +6,20 @@ from .models import Room
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from langchain.chat_models import ChatOpenAI
 import openai
+from langchain.chains import RetrievalQA
 import assemblyai as aai
 from dotenv import load_dotenv
 import os
-import os
+
 from decouple import config
 #os.environ['LANGCHAIN_TRACING_V2'] = 'true'
 #os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
 openai.api_key = settings.OPENAI_API_KEY
 langchain_api_key = os.getenv('LANGCHAIN_API_KEY', 'default_langchain_key')
 #openai_api_key = os.getenv('OPENAI_API_KEY', 'default_openai_key')
-
+model_name = "gpt-3.5-turbo"
 # Set the environment variables explicitly
 os.environ['LANGCHAIN_API_KEY'] = langchain_api_key
 #os.environ['OPENAI_API_KEY'] = openai_api_key
@@ -149,6 +151,26 @@ class CreateRoomView(APIView):
 
 class MessageView(APIView):
     def post(self, request, format=None):
+        def get_postgresql_connection_string():
+            db_settings = settings.DATABASES['default']
+            return f"postgresql+psycopg2://{db_settings['USER']}:{db_settings['PASSWORD']}@{db_settings['HOST']}:{db_settings['PORT']}/{db_settings['NAME']}"
         data=request.data
         print(data.get('input'))
+        llm = ChatOpenAI(model_name=model_name, temperature=0)
+        connection = get_postgresql_connection_string()
+        COLLECTION_NAME = "GO_COLLECTION"
+        embeddings = OpenAIEmbeddings()
+        db = PGVector(embeddings=embeddings, collection_name=COLLECTION_NAME, connection=connection, use_jsonb=True)
+        retriever = db.as_retriever(
+            search_kwargs={"k": 3}
+            )
+        qa_stuff = RetrievalQA.from_chain_type(
+            llm=llm, 
+            chain_type="stuff", 
+            retriever=retriever,
+            verbose=True,
+        )
+        query = data.get('input')
+        response = qa_stuff.run(query)
+        print(response)
         return Response(status=status.HTTP_200_OK)
