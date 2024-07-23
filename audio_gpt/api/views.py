@@ -94,8 +94,7 @@ class AudioFileView(APIView):
                     return [Document(page_content=self.text)]
 
             # Example usage
-            text = "Go, a statically typed compiled language often described as c for the 21st century. It's a popular choice for high performance server side applications, and is the language"
-            loader = StringDocumentLoader(text)
+            loader = StringDocumentLoader(transcript.text)
             documents = loader.load()
 
             print(documents)
@@ -158,19 +157,31 @@ class MessageView(APIView):
         print(data.get('input'))
         llm = ChatOpenAI(model_name=model_name, temperature=0)
         connection = get_postgresql_connection_string()
-        COLLECTION_NAME = "GO_COLLECTION"
+        COLLECTION_NAME = "my_audio"
         embeddings = OpenAIEmbeddings()
+        prompt = hub.pull("rlm/rag-prompt")
         db = PGVector(embeddings=embeddings, collection_name=COLLECTION_NAME, connection=connection, use_jsonb=True)
+        def format_docs(docs):
+            return "\n\n".join(doc.page_content for doc in docs)
         retriever = db.as_retriever(
-            search_kwargs={"k": 3}
+            search_kwargs={"k": 10}
             )
-        qa_stuff = RetrievalQA.from_chain_type(
-            llm=llm, 
-            chain_type="stuff", 
-            retriever=retriever,
-            verbose=True,
-        )
+        # qa_stuff = RetrievalQA.from_chain_type(
+        #     llm=llm, 
+        #     chain_type="stuff", 
+        #     retriever=retriever,
+        #     verbose=True,
+        # )
+        
         query = data.get('input')
-        response = qa_stuff.run(query)
-        print(response)
+        # response = qa_stuff.run(query)
+        rag_chain = (
+    {"context": retriever | format_docs, "question": RunnablePassthrough()}
+    | prompt
+    | llm
+    | StrOutputParser()
+)
+        
+        print(rag_chain.invoke(query))
+        #print(response)
         return Response(status=status.HTTP_200_OK)
