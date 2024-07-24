@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from langchain.chat_models import ChatOpenAI
 import openai
 from langchain.chains import RetrievalQA
+from langchain.prompts import PromptTemplate
 import assemblyai as aai
 from dotenv import load_dotenv
 import os
@@ -175,13 +176,24 @@ class MessageView(APIView):
         
         query = data.get('input')
         # response = qa_stuff.run(query)
+        template = """You are an AI that provides detailed and accurate answers based on given context. 
+        Use the information provided to answer the question comprehensively.
+        If you can't find the answer in the context. Use what you know inherently instead.
+        Always say "thanks for asking!" at the end of the answer.
+
+        {context}
+
+        Question: {question}
+
+        Helpful Answer:"""
+        custom_rag_prompt = PromptTemplate.from_template(template)
         rag_chain = (
     {"context": retriever | format_docs, "question": RunnablePassthrough()}
-    | prompt
+    | custom_rag_prompt
     | llm
     | StrOutputParser()
 )
         
-        print(rag_chain.invoke(query))
+        resp = rag_chain.invoke(query)
         #print(response)
-        return Response(status=status.HTTP_200_OK)
+        return Response(data={"response": resp}, status=status.HTTP_200_OK)

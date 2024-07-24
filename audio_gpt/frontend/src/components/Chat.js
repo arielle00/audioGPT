@@ -12,7 +12,7 @@ import "./Chat.css";
 const Message = ({ role, content }) => (
   <div className="flex flex-row">
     <img src={role === 'user' ? user : bot} alt="Message" className="w-8 h-8 mr-3 rounded-full border border-2 border-gray-700" />
-    <div className={`p-2 rounded-lg max-w-xl break-words ${role === 'user' ? 'bg-blue-500 text-white mt-0 ml-2 mr-5 mb-5' : 'bg-gray-200 m-5'}`}>
+    <div className={`p-2 rounded-lg max-w-xl break-words ${role === 'user' ? 'bg-blue-500 text-white mt-0 ml-2 mr-5 mb-5' : 'bg-gray-200 mt-0 ml-2 mr-5 mb-5'}`}>
       <p>{content}</p>
     </div>
   </div>
@@ -64,6 +64,7 @@ export default function Chat() {
     console.log('Input submitted:', input);
     const newMessage = { role:"user", id: messages.length + 1, text: input };
     addMessage(newMessage)
+    setInput([]);
     
     try {
       const response = await fetch('/api/add-message', {
@@ -74,8 +75,15 @@ export default function Chat() {
         body: JSON.stringify({ input }),
       });
 
+      
+
       if (response.ok) {
-        console.log('Data submitted successfully');
+        const data = await response.json()
+        console.log("test")
+        console.log(data)
+        const newMessageBot = { role:"bot", id: messages.length + 1, text: data.response };
+        addMessage(newMessageBot)
+        // console.log('Data submitted successfully');
       } else {
         console.error('Error submitting data');
       }
@@ -83,7 +91,7 @@ export default function Chat() {
       console.error('Error:', error);
     }
 
-    setInput([]);
+    
   }
 
   const clear_chat = () => {
@@ -109,67 +117,8 @@ export default function Chat() {
           />
            <Clear onClick={clear_chat} className="mt-4" />
         </div>
-        {/* <div className="flex-1 flex flex-col bg-white rounded-lg shadow-md p-4">
-          <h3 className="text-lg font-semibold mb-4">History</h3>
-          <div className="flex-1 overflow-y-auto mb-4">
-            {history.map((el, i) => {
-              return (
-                <History
-                  key={i}
-                  question={el.question}
-                  onClick={() =>
-                    setMessages([
-                      { role: 'user', content: history[i].question },
-                      { role: 'assistant', content: history[i].answer },
-                    ])
-                  }
-                />
-              );
-            })}
-          </div>
-          <Clear onClick={clear_chat} className="mt-4" />
-        </div> */}
+        
       </div>
     </div>
-  
-
-    // <div>Whatever dude</div>
-    // <div className="Chat">
-    //   <div className="Column">
-    //     <h3 className="Title">Chat Messages</h3>
-    //     <div className="Content">
-    //       {messages.map((el, i) => {
-    //         return <Message key={i} role={el.role} content={el.text} />;
-    //       })}
-    //     </div>
-    //     <Input
-    //       value={input}
-    //       onChange={(e) => setInput(e.target.value)}
-    //       onClick={input ? handleSubmit : undefined}
-
-    //     />
-
-    //   </div>
-    //   <div className="Column">
-    //     <h3 className="Title">History</h3>
-    //     <div className="Content">
-    //       {history.map((el, i) => {
-    //         return (
-    //           <History
-    //             key={i}
-    //             question={el.question}
-    //             onClick={() =>
-    //               setMessages([
-    //                 { role: "user", content: history[i].question },
-    //                 { role: "assistant", content: history[i].answer },
-    //               ])
-    //             }
-    //           />
-    //         );
-    //       })}
-    //     </div>
-    //     <Clear onClick={clear_chat} />
-    //   </div>
-    // </div>
   );
 }
