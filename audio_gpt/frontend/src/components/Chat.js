@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import bot from "../../static/frontend/static/images/bot.png";
 import user from "../../static/frontend/static/images/user.png";
-// import "./Chat.css";
-// import './index.css';
+//import "./Chat.css";
 
 const Message = ({ role, content }) => (
   <div className="flex flex-row">
@@ -55,9 +54,27 @@ export default function Chat() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [history, setHistory] = useState([]);
+  const messagesEndRef = useRef(null);
   
   const addMessage = (newMessage) => {
     setMessages(prevMessages => [...prevMessages, newMessage]);
+  };
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+  
+  const onKeyPressHandler = (e) => {
+    console.log("Key pressed:", e.key);
+    if (e.key === 'Enter') {
+      e.preventDefault();  // Prevent the default action if needed
+      handleSubmit();
+      console.log("enter");
+    }
   };
 
   const handleSubmit = async () => {
@@ -102,11 +119,12 @@ export default function Chat() {
             {messages.map((el, i) => (
               <Message key={i} role={el.role} content={el.text} />
             ))}
+            <div ref={messagesEndRef} />
           </div>
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            handleSubmit={handleSubmit}
+            handleSubmit={handleSubmit} // Use onSubmit instead of onClick and onKeyDown
             className="mt-4"
           />
           <Clear onClick={clearChat} className="mt-4" />
