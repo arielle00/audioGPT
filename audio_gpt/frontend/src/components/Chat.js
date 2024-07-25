@@ -12,11 +12,11 @@ const Message = ({ role, content }) => (
   </div>
 );
 
-const Input = ({ value, onChange, onSubmit, className }) => (
+const Input = ({ value, onChange, handleSubmit, className }) => (
   <form
     onSubmit={(e) => {
       e.preventDefault(); // Prevents default form submission behavior
-      onSubmit(); // Calls the provided submit handler
+      handleSubmit(); // Calls the provided submit handler
     }}
     className={`flex ${className}`}
   >
@@ -57,15 +57,6 @@ export default function Chat() {
   
   const addMessage = (newMessage) => {
     setMessages(prevMessages => [...prevMessages, newMessage]);
-  };
-  
-  const onKeyPressHandler = (e) => {
-    console.log("Key pressed:", e.key);
-    if (e.key === 'Enter') {
-      e.preventDefault();  // Prevent the default action if needed
-      handleSubmit();
-      console.log("enter");
-    }
   };
 
   const handleSubmit = async () => {
@@ -114,7 +105,7 @@ export default function Chat() {
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onSubmit={handleSubmit} // Use onSubmit instead of onClick and onKeyDown
+            handleSubmit={handleSubmit}
             className="mt-4"
           />
           <Clear onClick={clearChat} className="mt-4" />
