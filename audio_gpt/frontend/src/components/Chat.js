@@ -18,12 +18,13 @@ const Message = ({ role, content }) => (
   </div>
 );
 
-const Input = ({ value, onChange, onClick, className }) => (
+const Input = ({ value, onChange, onClick, onKeyPressHandler, className }) => (
   <div className={`flex ${className}`}>
     <input
       type="text"
       value={value}
       onChange={onChange}
+      onKeyPress={onKeyPressHandler}
       className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
     />
     <button
@@ -59,8 +60,15 @@ export default function Chat() {
     setMessages(prevMessages => [...prevMessages, newMessage]);
   };
   
+  const onKeyPressHandler = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();  // Prevent the default action if needed
+      handleSubmit();
+      console.log("enter");
+    }
+  };
+
   const handleSubmit = async () => {
-    // Your form submission logic here
     console.log('Input submitted:', input);
     const newMessage = { role:"user", id: messages.length + 1, text: input };
     addMessage(newMessage)
@@ -113,6 +121,7 @@ export default function Chat() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onClick={input ? handleSubmit : undefined}
+            onKeyPress={onKeyPressHandler}
             className="mt-4"
           />
            <Clear onClick={clear_chat} className="mt-4" />

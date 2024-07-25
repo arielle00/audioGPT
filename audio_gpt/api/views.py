@@ -167,12 +167,7 @@ class MessageView(APIView):
         retriever = db.as_retriever(
             search_kwargs={"k": 10}
             )
-        # qa_stuff = RetrievalQA.from_chain_type(
-        #     llm=llm, 
-        #     chain_type="stuff", 
-        #     retriever=retriever,
-        #     verbose=True,
-        # )
+       
         
         query = data.get('input')
         # response = qa_stuff.run(query)
@@ -188,11 +183,11 @@ class MessageView(APIView):
         Helpful Answer:"""
         custom_rag_prompt = PromptTemplate.from_template(template)
         rag_chain = (
-    {"context": retriever | format_docs, "question": RunnablePassthrough()}
-    | custom_rag_prompt
-    | llm
-    | StrOutputParser()
-)
+            {"context": retriever | format_docs, "question": RunnablePassthrough()}
+            | custom_rag_prompt
+            | llm
+            | StrOutputParser()
+        )
         
         resp = rag_chain.invoke(query)
         #print(response)
