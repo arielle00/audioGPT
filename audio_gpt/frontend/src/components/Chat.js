@@ -1,12 +1,6 @@
-import React from 'react';
-import { useState } from "react";
+import React, { useState } from 'react';
 import bot from "../../static/frontend/static/images/bot.png";
 import user from "../../static/frontend/static/images/user.png";
-
-// import Message from "./chat_components/Message";
-// import Input from "./chat_components/Input";
-// import History from "./chat_components/History";
-// import Clear from "./chat_components/Clear";
 import "./Chat.css";
 
 const Message = ({ role, content }) => (
@@ -18,22 +12,27 @@ const Message = ({ role, content }) => (
   </div>
 );
 
-const Input = ({ value, onChange, onClick, onKeyPressHandler, className }) => (
-  <div className={`flex ${className}`}>
+const Input = ({ value, onChange, onSubmit, className }) => (
+  <form
+    onSubmit={(e) => {
+      e.preventDefault(); // Prevents default form submission behavior
+      onSubmit(); // Calls the provided submit handler
+    }}
+    className={`flex ${className}`}
+  >
     <input
       type="text"
       value={value}
       onChange={onChange}
-      onKeyPress={onKeyPressHandler}
       className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
     />
     <button
-      onClick={onClick}
+      type="submit" // Change to type="submit"
       className="ml-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
     >
       Send
     </button>
-  </div>
+  </form>
 );
 
 const History = ({ question, onClick }) => (
@@ -61,6 +60,7 @@ export default function Chat() {
   };
   
   const onKeyPressHandler = (e) => {
+    console.log("Key pressed:", e.key);
     if (e.key === 'Enter') {
       e.preventDefault();  // Prevent the default action if needed
       handleSubmit();
@@ -69,10 +69,11 @@ export default function Chat() {
   };
 
   const handleSubmit = async () => {
+    if (!input.trim()) return; // Don't submit empty inputs
     console.log('Input submitted:', input);
-    const newMessage = { role:"user", id: messages.length + 1, text: input };
-    addMessage(newMessage)
-    setInput([]);
+    const newMessage = { role: "user", id: messages.length + 1, text: input };
+    addMessage(newMessage);
+    setInput("");
     
     try {
       const response = await fetch('/api/add-message', {
@@ -83,50 +84,41 @@ export default function Chat() {
         body: JSON.stringify({ input }),
       });
 
-      
-
       if (response.ok) {
-        const data = await response.json()
-        console.log("test")
-        console.log(data)
-        const newMessageBot = { role:"bot", id: messages.length + 1, text: data.response };
-        addMessage(newMessageBot)
-        // console.log('Data submitted successfully');
+        const data = await response.json();
+        console.log(data);
+        const newMessageBot = { role: "bot", id: messages.length + 2, text: data.response }; // Ensure unique ID
+        addMessage(newMessageBot);
       } else {
         console.error('Error submitting data');
       }
     } catch (error) {
       console.error('Error:', error);
     }
-
-    
   }
 
-  const clear_chat = () => {
-      setMessages([]);
+  const clearChat = () => {
+    setMessages([]);
   }
 
   return (
-   
     <div>
-      <div className=" justify-center flex inset-0 space-x-4 p-4 items-center bg-gray-200 h-10/10">
-        <div className=" center flex flex-col bg-white rounded-lg shadow-md p-4 w-3/4 h-[80vh]">
+      <div className="justify-center flex inset-0 space-x-4 p-4 items-center bg-gray-200 h-10/10">
+        <div className="center flex flex-col bg-white rounded-lg shadow-md p-4 w-3/4 h-[80vh]">
           <h3 className="text-lg font-semibold mb-4">Chat Messages</h3>
           <div className="overflow-y-auto flex-1 overflow-y-auto mb-4">
-            {messages.map((el, i) => {
-              return <Message key={i} role={el.role} content={el.text} />;
-            })}
+            {messages.map((el, i) => (
+              <Message key={i} role={el.role} content={el.text} />
+            ))}
           </div>
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onClick={input ? handleSubmit : undefined}
-            onKeyPress={onKeyPressHandler}
+            onSubmit={handleSubmit} // Use onSubmit instead of onClick and onKeyDown
             className="mt-4"
           />
-           <Clear onClick={clear_chat} className="mt-4" />
+          <Clear onClick={clearChat} className="mt-4" />
         </div>
-        
       </div>
     </div>
   );
