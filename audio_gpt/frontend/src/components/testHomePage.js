@@ -46,7 +46,7 @@ function TestHomePage() {
   }
 
   return (
-    <div className="flex justify-center items-center h-screen bg-customColorRed">
+    <div className="flex justify-center items-center h-screen bg-blue-300">
       <div className="p-8 bg-customColorGray rounded-lg shadow-md h-100 w-100">
         <h1 className="text-2xl font-bold mb-4">Uploading files</h1>
         <input
