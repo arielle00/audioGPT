@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import bot from "../../static/frontend/static/images/bot.png";
 import user from "../../static/frontend/static/images/user.png";
-import "./Chat.css";
+// import "./Chat.css";
+// import './index.css';
 
 const Message = ({ role, content }) => (
   <div className="flex flex-row">

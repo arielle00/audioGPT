@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import './testHomePage.css'
+// import './index.css';
 
 function TestHomePage() {
   const [file, setFile] = useState(null);
@@ -45,21 +46,23 @@ function TestHomePage() {
   }
 
   return (
-    <div className="p-8 bg-white rounded-lg shadow-md h-screen">
-      <h1 className="text-2xl font-bold mb-4">Uploading files</h1>
-      <input
-        className="mb-4 p-2 border border-gray-300 rounded-lg"
-        onChange={(e) => { setFile(e.target.files[0]) }}
-        type="file"
-      />
-      <button
-        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-        onClick={handleUpload}
-      >
-        Upload
-      </button>
-      {msg && <p className="mt-4 text-green-600">{msg}</p>}
-      {progress.started && <p className="mt-2">Progress: {progress.pc}%</p>}
+    <div className="flex justify-center items-center h-screen bg-customColorRed">
+      <div className="p-8 bg-customColorGray rounded-lg shadow-md h-100 w-100">
+        <h1 className="text-2xl font-bold mb-4">Uploading files</h1>
+        <input
+          className="mb-4 p-2 border border-gray-300 rounded-lg"
+          onChange={(e) => { setFile(e.target.files[0]) }}
+          type="file"
+        />
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+          onClick={handleUpload}
+        >
+          Upload
+        </button>
+        {msg && <p className="mt-4 text-green-600">{msg}</p>}
+        {progress.started && <p className="mt-2">Progress: {progress.pc}%</p>}
+      </div>
     </div>
   );
 }
