@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
-    "build:css": " npx tailwindcss -i ./src/index.css -o ./src/static/css/output.css  --minify",
-    "watch:css": "npx tailwindcss -i ./src/index.css -o ./src/static/css/output.css --watch",
+    "build:css": "tailwindcss -i ./src/index.css -o ./static/css/output.css  --minify",
+    "watch:css": "npx tailwindcss -i ./src/index.css -o ./static/css/output.css --watch",
     "webpack:watch": "webpack --mode development --watch",
     "dev": "concurrently \"npm run watch:css\" \"npm run webpack:watch\""
   },
