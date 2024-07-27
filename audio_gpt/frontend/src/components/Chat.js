@@ -12,7 +12,7 @@ const Message = ({ role, content }) => (
   </div>
 );
 
-const Input = ({ value, onChange, handleSubmit, className }) => (
+const Input = ({ value, onChange, handleSubmit, className, loading }) => (
   <form
     onSubmit={(e) => {
       e.preventDefault(); // Prevents default form submission behavior
@@ -25,10 +25,12 @@ const Input = ({ value, onChange, handleSubmit, className }) => (
       value={value}
       onChange={onChange}
       className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      disabled={loading}
     />
     <button
       type="submit" // Change to type="submit"
       className="ml-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+      disabled={loading}
     >
       Send
     </button>
@@ -55,6 +57,7 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [history, setHistory] = useState([]);
   const messagesEndRef = useRef(null);
+  const [loading, setLoading] = useState(false);
   
   const addMessage = (newMessage) => {
     setMessages(prevMessages => [...prevMessages, newMessage]);
@@ -83,6 +86,7 @@ export default function Chat() {
     const newMessage = { role: "user", id: messages.length + 1, text: input };
     addMessage(newMessage);
     setInput("");
+    setLoading(true);
     
     try {
       const response = await fetch('/api/add-message', {
@@ -103,6 +107,9 @@ export default function Chat() {
       }
     } catch (error) {
       console.error('Error:', error);
+    }
+    finally{
+      setLoading(false)
     }
   }
 
@@ -126,6 +133,7 @@ export default function Chat() {
             onChange={(e) => setInput(e.target.value)}
             handleSubmit={handleSubmit} // Use onSubmit instead of onClick and onKeyDown
             className="mt-4"
+            loading={loading}
           />
           <Clear onClick={clearChat} className="mt-4" />
         </div>
