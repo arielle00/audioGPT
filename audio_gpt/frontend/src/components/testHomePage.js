@@ -61,7 +61,7 @@ function TestHomePage() {
         <h1 className="text-2xl font-bold mb-4">Please Upload Your Audio File</h1>
         <div className="flex flex-row items-center space-x-2">
           <input
-            className="mb-4 p-2 border border-gray-300 rounded-lg"
+            className="p-2 border border-gray-300 rounded-lg"
             onChange={(e) => { setFile(e.target.files[0]) }}
             type="file"
           />

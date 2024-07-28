@@ -6,7 +6,7 @@ import user from "../../static/frontend/static/images/user.png";
 const Message = ({ role, content }) => (
   <div className="flex flex-row">
     <img src={role === 'user' ? user : bot} alt="Message" className="w-8 h-8 mr-3 rounded-full border border-2 border-gray-700" />
-    <div className={`p-2 rounded-lg max-w-xl break-words ${role === 'user' ? 'bg-blue-500 text-white mt-0 ml-2 mr-5 mb-5' : 'bg-gray-200 mt-0 ml-2 mr-5 mb-5'}`}>
+    <div className={`p-2 rounded-lg max-w-xl break-words ${role === 'user' ? 'bg-darkvanilla text-black mt-0 ml-2 mr-5 mb-5' : 'bg-vanilla mt-0 ml-2 mr-5 mb-5'}`}>
       <p>{content}</p>
     </div>
   </div>
@@ -24,12 +24,12 @@ const Input = ({ value, onChange, handleSubmit, className, loading }) => (
       type="text"
       value={value}
       onChange={onChange}
-      className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brown"
+      className="flex-1 p-2 border text-white bg-lightbrown border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brown"
       disabled={loading}
     />
     <button
       type="submit" // Change to type="submit"
-      className="ml-2 px-4 py-2 bg-brown text-white rounded-lg hover:bg-blue-700"
+      className="ml-2 px-4 py-2 bg-brown text-white rounded-lg hover:bg-raisin"
       disabled={loading}
     >
       Send
@@ -38,7 +38,7 @@ const Input = ({ value, onChange, handleSubmit, className, loading }) => (
 );
 
 const History = ({ question, onClick }) => (
-  <div onClick={onClick} className="p-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200">
+  <div onClick={onClick} className="w-2 h-2 p-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200">
     <p>{question}</p>
   </div>
 );
@@ -46,9 +46,9 @@ const History = ({ question, onClick }) => (
 const Clear = ({ onClick, className }) => (
   <button
     onClick={onClick}
-    className={`px-4 py-2 bg-raisin text-white rounded-lg hover:bg-red-700 ${className}`}
+    className={`px-4 py-2 w-1/4 bg-raisin text-white rounded-lg hover:bg-red-700 ${className}`}
   >
-    Clear Chat
+    Clear
   </button>
 );
 
@@ -121,7 +121,8 @@ export default function Chat() {
     <div>
       <div className="justify-center flex inset-0 space-x-4 p-4 items-center bg-gray h-screen">
         <div className="center flex flex-col bg-vanilla rounded-lg shadow-md p-4 w-3/4 h-[80vh]">
-          <h3 className="text-lg font-semibold mb-4">Chat Messages</h3>
+          <h3 className="text-lg font-semibold mb-4">CHAT MESSAGES</h3>
+          <hr className="border-t-2 border-amethyst mb-4" />
           <div className="overflow-y-auto flex-1 overflow-y-auto mb-4">
             {messages.map((el, i) => (
               <Message key={i} role={el.role} content={el.text} />
@@ -135,7 +136,7 @@ export default function Chat() {
             className="my-6"
             loading={loading}
           />
-          <Clear onClick={clearChat} className="my-6" />
+          <Clear onClick={clearChat} className=" w-15 h-15 my-6" />
         </div>
       </div>
     </div>
