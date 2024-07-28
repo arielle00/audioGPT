@@ -7,6 +7,7 @@ function TestHomePage() {
   const [file, setFile] = useState(null);
   const [progress, setProgress] = useState({ started: false, pc: 0 });
   const [msg, setMsg] = useState(null);
+  const [error, setError] = useState()
   const audioName = "my_audio";
 
   function handleUpload() {
@@ -14,6 +15,15 @@ function TestHomePage() {
       console.log("No file selected");
       return;
     }
+
+      // Check if the file is an audio file by checking its MIME type
+    if (file.type.startsWith('audio/')) {
+      setError('');
+    } else {
+      setError('Please upload a valid audio file.');
+      return;
+    }
+    
 
     const fd = new FormData();
     fd.append('audio_file', file);
@@ -48,20 +58,23 @@ function TestHomePage() {
   return (
     <div className="flex justify-center items-center h-screen bg-gray">
       <div className="p-8 bg-vanilla rounded-lg shadow-md h-100 w-100">
-        <h1 className="text-2xl font-bold mb-4">Uploading files</h1>
-        <input
-          className="mb-4 p-2 border border-gray-300 rounded-lg"
-          onChange={(e) => { setFile(e.target.files[0]) }}
-          type="file"
-        />
-        <button
-          className="bg-brown text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-          onClick={handleUpload}
-        >
-          Upload
-        </button>
+        <h1 className="text-2xl font-bold mb-4">Please Upload Your Audio File</h1>
+        <div className="flex flex-row">
+          <input
+            className="mb-4 p-2 border border-gray-300 rounded-lg"
+            onChange={(e) => { setFile(e.target.files[0]) }}
+            type="file"
+          />
+          <button
+            className="bg-brown text-white px-4 py-2 rounded-lg hover:bg-raisin"
+            onClick={handleUpload}
+          >
+            Upload
+          </button>
+        </div>
         {msg && <p className="mt-4 text-green-600">{msg}</p>}
         {progress.started && <p className="mt-2">Progress: {progress.pc}%</p>}
+        {error}
       </div>
     </div>
   );
