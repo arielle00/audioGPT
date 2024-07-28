@@ -24,12 +24,12 @@ const Input = ({ value, onChange, handleSubmit, className, loading }) => (
       type="text"
       value={value}
       onChange={onChange}
-      className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brown"
       disabled={loading}
     />
     <button
       type="submit" // Change to type="submit"
-      className="ml-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+      className="ml-2 px-4 py-2 bg-brown text-white rounded-lg hover:bg-blue-700"
       disabled={loading}
     >
       Send
@@ -46,7 +46,7 @@ const History = ({ question, onClick }) => (
 const Clear = ({ onClick, className }) => (
   <button
     onClick={onClick}
-    className={`px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 ${className}`}
+    className={`px-4 py-2 bg-raisin text-white rounded-lg hover:bg-red-700 ${className}`}
   >
     Clear Chat
   </button>
@@ -119,8 +119,8 @@ export default function Chat() {
 
   return (
     <div>
-      <div className="justify-center flex inset-0 space-x-4 p-4 items-center bg-gray-200 h-10/10">
-        <div className="center flex flex-col bg-white rounded-lg shadow-md p-4 w-3/4 h-[80vh]">
+      <div className="justify-center flex inset-0 space-x-4 p-4 items-center bg-gray h-screen">
+        <div className="center flex flex-col bg-vanilla rounded-lg shadow-md p-4 w-3/4 h-[80vh]">
           <h3 className="text-lg font-semibold mb-4">Chat Messages</h3>
           <div className="overflow-y-auto flex-1 overflow-y-auto mb-4">
             {messages.map((el, i) => (
@@ -132,10 +132,10 @@ export default function Chat() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             handleSubmit={handleSubmit} // Use onSubmit instead of onClick and onKeyDown
-            className="mt-4"
+            className="my-6"
             loading={loading}
           />
-          <Clear onClick={clearChat} className="mt-4" />
+          <Clear onClick={clearChat} className="my-6" />
         </div>
       </div>
     </div>
