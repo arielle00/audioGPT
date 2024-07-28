@@ -6,9 +6,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        customColorRed: '#D23E3E', 
-        customColorGray: '#8B8B94',
-        customColorGreen:  '#4CAF50',
+        primary: '#2C3E50',
+        secondary: '#1ABC9C',
+        accent: '#E74C3C',
+        background: '#ECF0F1',
+        text: '#2F4F4F',
       }
     },
   },

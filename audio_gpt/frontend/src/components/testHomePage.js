@@ -46,8 +46,8 @@ function TestHomePage() {
   }
 
   return (
-    <div className="flex justify-center items-center h-screen bg-customColorGreen">
-      <div className="p-8 bg-customColorGray rounded-lg shadow-md h-100 w-100">
+    <div className="flex justify-center items-center h-screen bg-primary">
+      <div className="p-8 bg-secondary rounded-lg shadow-md h-100 w-100">
         <h1 className="text-2xl font-bold mb-4">Uploading files</h1>
         <input
           className="mb-4 p-2 border border-gray-300 rounded-lg"
@@ -55,7 +55,7 @@ function TestHomePage() {
           type="file"
         />
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+          className="bg-text text-white px-4 py-2 rounded-lg hover:bg-blue-600"
           onClick={handleUpload}
         >
           Upload
