@@ -123,9 +123,9 @@ export default function Chat() {
         <div className="center flex flex-col bg-vanilla rounded-lg shadow-md p-4 w-3/4 h-[80vh]">
           <div className="flex flex-row justify-between items-center">
             <h3 className="text-lg font-semibold">CHAT MESSAGES</h3>
-            <button className="ml-2 px-4 py-2 pb-2 bg-brown text-white rounded-lg hover:bg-raisin">Template</button>
+            <button className="ml-2 px-2 py-2 bg-brown text-white rounded-lg hover:bg-raisin">Template</button>
           </div>
-          <hr className="border-t-2 border-amethyst mb-4" />
+          <hr className="border-t-2 border-amethyst mb-2 mt-2" />
           <div className="overflow-y-auto flex-1 overflow-y-auto mb-4">
             {messages.map((el, i) => (
               <Message key={i} role={el.role} content={el.text} />
