@@ -46,7 +46,7 @@ const History = ({ question, onClick }) => (
 const Clear = ({ onClick, className }) => (
   <button
     onClick={onClick}
-    className={`px-4 py-2 w-1/4 bg-raisin text-white rounded-lg hover:bg-red-700 ${className}`}
+    className={`px-4 py-2 bg-raisin text-white rounded-lg hover:bg-red-700 ${className}`}
   >
     Clear
   </button>
@@ -122,6 +122,7 @@ export default function Chat() {
       <div className="justify-center flex inset-0 space-x-4 p-4 items-center bg-gray h-screen">
         <div className="center flex flex-col bg-vanilla rounded-lg shadow-md p-4 w-3/4 h-[80vh]">
           <div className="flex flex-row justify-between items-center">
+            <Clear onClick={clearChat} className=" w-15 h-15" />
             <h3 className="text-lg font-semibold">CHAT MESSAGES</h3>
             <button className="ml-2 px-2 py-2 bg-brown text-white rounded-lg hover:bg-raisin">Template</button>
           </div>
@@ -139,7 +140,7 @@ export default function Chat() {
             className="my-6"
             loading={loading}
           />
-          <Clear onClick={clearChat} className=" w-15 h-15 my-6" />
+          {/* <Clear onClick={clearChat} className=" w-15 h-15 my-6" /> */}
         </div>
       </div>
     </div>
