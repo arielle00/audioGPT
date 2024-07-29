@@ -57,14 +57,15 @@ function TestHomePage() {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray">
-      <div className="p-8 bg-vanilla rounded-lg shadow-md h-100 w-100">
-        <h1 className="text-2xl font-bold mb-4">Please Upload Your Audio File</h1>
+      <div className="outline-dashed p-8 bg-vanilla rounded-lg shadow-md h-100 w-100">
+        <h1 className="text-2xl font-bold mb-4">Please Upload Your Audio File (mp3)</h1>
         <div className="flex flex-row items-center space-x-2">
           <input
-            className="p-2 border border-gray-300 rounded-lg"
+            className="p-2 border border-gray-300 bg-white rounded-full file:rounded-full"
             onChange={(e) => { setFile(e.target.files[0]) }}
             type="file"
           />
+          
           <button
             className="bg-brown text-white px-4 py-2 rounded-lg hover:bg-raisin"
             onClick={handleUpload}
