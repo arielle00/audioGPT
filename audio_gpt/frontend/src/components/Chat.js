@@ -147,10 +147,7 @@ export default function Chat() {
           <Clear onClick={clearChat} className=" w-15 h-15 my-6" />
         </div>
       </div>
-      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
-        <h2 className="text-xl font-bold">Modal Title</h2>
-        <p>This is the content of the modal.</p>
-      </Modal>
+      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
     </div>
   );
 }
