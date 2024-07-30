@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Room, FileSave
+from .models import FileSave
 
 
 class FileSerializer(serializers.ModelSerializer):
