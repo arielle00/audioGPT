@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import bot from "../../static/frontend/static/images/bot.png";
 import user from "../../static/frontend/static/images/user.png";
 import Modal from './Modal';
-//import "./Chat.css";
 
 const Message = ({ role, content }) => (
   <div className="flex flex-row">
