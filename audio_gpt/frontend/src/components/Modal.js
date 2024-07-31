@@ -51,7 +51,8 @@ If there is no context try to answer in the best way possible based off what you
       <div className="bg-vanilla p-6 rounded-lg shadow-lg w-full max-w-lg lg:max-w-xl relative">
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full"
+          className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white p-1 rounded-full"
+          
         >
           &times;
         </button>
