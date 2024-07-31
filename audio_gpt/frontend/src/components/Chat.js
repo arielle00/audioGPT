@@ -64,6 +64,7 @@ export default function Chat() {
       what you inherently know with the context to give a unique and interesting point of view. If there is no context,
       go based off what you know inherently. Please end by saying "Hopefully this answers your question!"`)
   const [currTemplate, setCurrTemplate] = useState("GenericGPT")
+  const [notification, setNotification] = useState("");
   
   const addMessage = (newMessage) => {
     setMessages(prevMessages => [...prevMessages, newMessage]);
@@ -125,7 +126,12 @@ export default function Chat() {
 
   return (
     <div>
-      <div className="justify-center flex inset-0 space-x-4 p-4 items-center bg-gray h-screen">
+      <div className="justify-center flex flex-col inset-0 space-x-4 p-4 items-center bg-gray h-screen">
+      {notification && (
+            <div className="fixed flex bg-green-500 text-white p-2 rounded-lg shadow-lg transition-opacity duration-500 opacity-100">
+              {notification}
+            </div>
+          )}
         <div className="center flex flex-col bg-vanilla rounded-lg shadow-md p-4 w-3/4 h-[80vh]">
           <div className="flex flex-row justify-between items-center">
             <Clear onClick={clearChat} className=" w-15 h-15" />
@@ -149,10 +155,19 @@ export default function Chat() {
             className="my-6"
             loading={loading}
           />
-          {/* <Clear onClick={clearChat} className=" w-15 h-15 my-6" /> */}
+          
         </div>
       </div>
-      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onSelect={(sysPrompt, name)  => {setCurrTemplate(name);  setSysPrompt(sysPrompt)}}/>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        onSelect={(sysPrompt, name) => {
+          setCurrTemplate(name);
+          setSysPrompt(sysPrompt);
+          setNotification(`Template "${name}" has been selected!`);
+          setTimeout(() => setNotification(""), 500);
+        }}
+      />
     </div>
   );
 }
