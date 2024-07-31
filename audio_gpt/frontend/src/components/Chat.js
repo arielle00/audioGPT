@@ -59,6 +59,7 @@ export default function Chat() {
   const messagesEndRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [selectTemplate, setSelectTemplate] = useState("GenericGPT")
   
   const addMessage = (newMessage) => {
     setMessages(prevMessages => [...prevMessages, newMessage]);
@@ -95,7 +96,7 @@ export default function Chat() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ input }),
+        body: JSON.stringify({ input, selectTemplate }),
       });
 
       if (response.ok) {
@@ -147,7 +148,7 @@ export default function Chat() {
           {/* <Clear onClick={clearChat} className=" w-15 h-15 my-6" /> */}
         </div>
       </div>
-      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onSelect={(temp)  => {setSelectTemplate(temp)}}/>
     </div>
   );
 }

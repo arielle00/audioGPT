@@ -123,11 +123,9 @@ class MessageView(APIView):
        
         
         query = data.get('input')
+        systemPrompt = data.get('selectTemplate')
         # response = qa_stuff.run(query)
-        template = """You are an AI that provides detailed and accurate answers based on given context. 
-        Use the information provided to answer the question comprehensively.
-        If you can't find the answer in the context. Use what you know inherently instead.
-        Always say "thanks for asking!" at the end of the answer.
+        template = systemPrompt + """
 
         {context}
 

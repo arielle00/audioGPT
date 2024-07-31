@@ -1,58 +1,66 @@
-// Modal.js
-import React, { useState } from "react";
+import React from "react";
 
-const Modal = ({ isOpen, onClose }) => {
+const Modal = ({ isOpen, onClose, onSelect }) => {
+  // Define handleTemplateClick as an arrow function within the component's scope
+  const handleTemplateClick = (template) => {
+    onSelect(template);
+    console.log(template);
+    onClose()
+  };
 
-  const templates = ['leaguegpt', 'podcastgpt']
+  const templates = [
+    {
+      name: "PodcastGPT",
+      description: "Best suited to extract insights from podcasts",
+      systemPrompt: `You are an AI language model that extracts key insights and information from a podcast audio transcript. Look through the context of what we've been provided and
+    provide answers in this format:
 
-  const templateList = ({tempName}) => {
-    <div>
-      {tempName}
+1. **Summary**: Provide a brief summary of the podcast episode.
+2. **Key Topics**: List the main topics discussed in the podcast.
+3. **Important Points**: Highlight any significant points or arguments made by the speakers.
+4. **Speaker Insights**: Identify and describe any unique insights or perspectives shared by the speakers.
+5. **Actionable Takeaways**: What actionable advice or takeaways can listeners apply from this podcast?
+6. **Quotes**: Include any memorable quotes or statements from the podcast.
+
+If there is no context try to answer in the best way possible based off what you know inherently.`,
+    },
+    {
+      name: "GenericGPT",
+      description: "Best suited for general purpose answers",
+      systemPrompt: `You are a helpful AI assistant who can provide valuable insights and detailed explanations.
+      If you can, use the context provided to help answer the questions. Please give very detailed answers combining
+      what you inherently know with the context to give a unique and interesting point of view. If there is no context,
+      go based off what you know inherently. Please end by saying "Hopefully this answers your question!"`,
+    },
+  ];
+
+  const templateList = (template) => (
+    <div
+      key={template.name}
+      onClick={() => handleTemplateClick(template.systemPrompt)} // Pass a function that calls handleTemplateClick
+      className="p-2 bg-brown mb-2 rounded-lg text-white hover:bg-raisin cursor-pointer"
+    >
+      {template.name} - {template.description}
     </div>
-
-  }
-  const [activeTab, setActiveTab] = useState("tab1"); // State to track active tab
+  );
 
   if (!isOpen) return null; // Do not render the modal if it's not open
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-      <div className="bg-vanilla p-6 rounded-lg shadow-lg w-96">
+      <div className="bg-vanilla p-6 rounded-lg shadow-lg w-full max-w-lg lg:max-w-xl relative">
         <button
           onClick={onClose}
           className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full"
         >
           &times;
         </button>
-        <div className="mb-4">
-          <button
-            className={`px-4 py-2 ${activeTab === "tab1" ? "bg-blue-500 text-white" : "bg-gray-200"} rounded-l-lg`}
-            onClick={() => setActiveTab("tab1")}
-          >
-            Select Template
-          </button>
-          <button
-            className={`px-4 py-2 ${activeTab === "tab2" ? "bg-blue-500 text-white" : "bg-gray-200"} rounded-r-lg`}
-            onClick={() => setActiveTab("tab2")}
-          >
-            Add Template
-          </button>
-        </div>
-        <div>
-          {activeTab === "tab1" && (
-            <div className="bg-vanilla">
-            <h2 className="text-xl font-bold">Tab 1 Content</h2>
-            {templates.map((template) => (
-              <div key={template.id}>{templateList(template)}</div>
-            ))}
-          </div>
-          )}
-          {activeTab === "tab2" && (
-            <div className="bg-vanilla">
-              <h2 className="text-xl font-bold">Tab 2 Content</h2>
-              <p>This is the content of Tab 2.</p>
-            </div>
-          )}
+        <h2 className="text-xl font-bold mb-4">Select a Template</h2>
+        <h4 className="text-lg mb-4">
+          Select a system prompt which best suits your purpose
+        </h4>
+        <div className="bg-vanilla">
+          {templates.map((template) => templateList(template))}
         </div>
       </div>
     </div>
