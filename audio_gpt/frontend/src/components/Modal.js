@@ -2,6 +2,15 @@
 import React, { useState } from "react";
 
 const Modal = ({ isOpen, onClose }) => {
+
+  const templates = ['leaguegpt', 'podcastgpt']
+
+  const templateList = ({tempName}) => {
+    <div>
+      {tempName}
+    </div>
+
+  }
   const [activeTab, setActiveTab] = useState("tab1"); // State to track active tab
 
   if (!isOpen) return null; // Do not render the modal if it's not open
@@ -32,9 +41,11 @@ const Modal = ({ isOpen, onClose }) => {
         <div>
           {activeTab === "tab1" && (
             <div className="bg-vanilla">
-              <h2 className="text-xl font-bold">Tab 1 Content</h2>
-              <p>This is the content of Tab 1.</p>
-            </div>
+            <h2 className="text-xl font-bold">Tab 1 Content</h2>
+            {templates.map((template) => (
+              <div key={template.id}>{templateList(template)}</div>
+            ))}
+          </div>
           )}
           {activeTab === "tab2" && (
             <div className="bg-vanilla">
