@@ -2,9 +2,9 @@ import React from "react";
 
 const Modal = ({ isOpen, onClose, onSelect }) => {
   // Define handleTemplateClick as an arrow function within the component's scope
-  const handleTemplateClick = (template) => {
-    onSelect(template);
-    console.log(template);
+  const handleTemplateClick = (sysPrompt, name) => {
+    onSelect(sysPrompt, name);
+    console.log(sysPrompt);
     onClose()
   };
 
@@ -37,7 +37,7 @@ If there is no context try to answer in the best way possible based off what you
   const templateList = (template) => (
     <div
       key={template.name}
-      onClick={() => handleTemplateClick(template.systemPrompt)} // Pass a function that calls handleTemplateClick
+      onClick={() => handleTemplateClick(template.systemPrompt, template.name)} // Pass a function that calls handleTemplateClick
       className="p-2 bg-brown mb-2 rounded-lg text-white hover:bg-raisin cursor-pointer"
     >
       {template.name} - {template.description}
@@ -55,7 +55,7 @@ If there is no context try to answer in the best way possible based off what you
         >
           &times;
         </button>
-        <h2 className="text-xl font-bold mb-4">Select a Template</h2>
+        <h2 className="text-xl font-bold mb-4">Select a Prompt Template</h2>
         <h4 className="text-lg mb-4">
           Select a system prompt which best suits your purpose
         </h4>

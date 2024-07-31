@@ -123,7 +123,7 @@ class MessageView(APIView):
        
         
         query = data.get('input')
-        systemPrompt = data.get('selectTemplate')
+        systemPrompt = data.get('sysPrompt')
         # response = qa_stuff.run(query)
         template = systemPrompt + """
 

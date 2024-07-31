@@ -59,7 +59,11 @@ export default function Chat() {
   const messagesEndRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [selectTemplate, setSelectTemplate] = useState("GenericGPT")
+  const [sysPrompt, setSysPrompt] = useState(`You are a helpful AI assistant who can provide valuable insights and detailed explanations.
+      If you can, use the context provided to help answer the questions. Please give very detailed answers combining
+      what you inherently know with the context to give a unique and interesting point of view. If there is no context,
+      go based off what you know inherently. Please end by saying "Hopefully this answers your question!"`)
+  const [currTemplate, setCurrTemplate] = useState("GenericGPT")
   
   const addMessage = (newMessage) => {
     setMessages(prevMessages => [...prevMessages, newMessage]);
@@ -96,7 +100,7 @@ export default function Chat() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ input, selectTemplate }),
+        body: JSON.stringify({ input, sysPrompt }),
       });
 
       if (response.ok) {
@@ -128,7 +132,7 @@ export default function Chat() {
             <h3 className="text-lg font-semibold">CHAT MESSAGES</h3>
             <button className="ml-2 px-2 py-2 bg-brown text-white rounded-lg hover:bg-raisin"
             onClick={() => setModalOpen(true)}>
-              Template
+              Template: <span className="font-bold">{currTemplate}</span>
             </button>
           </div>
           <hr className="border-t-2 border-amethyst mb-2 mt-2" />
@@ -148,7 +152,7 @@ export default function Chat() {
           {/* <Clear onClick={clearChat} className=" w-15 h-15 my-6" /> */}
         </div>
       </div>
-      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onSelect={(temp)  => {setSelectTemplate(temp)}}/>
+      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onSelect={(sysPrompt, name)  => {setCurrTemplate(name);  setSysPrompt(sysPrompt)}}/>
     </div>
   );
 }
