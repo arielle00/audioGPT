@@ -2,6 +2,7 @@ from django.shortcuts import render
 # from django.http import HttpResponse
 from rest_framework import generics, status
 from .serializers import  FileSerializer
+from .serializers import  ProfileSerializer
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -40,7 +41,6 @@ load_dotenv()
 class AudioFileView(APIView):
     serializer_class = FileSerializer
 
-    
     def post(self, request, format=None):
         def get_postgresql_connection_string():
             db_settings = settings.DATABASES['default']
@@ -142,3 +142,12 @@ class MessageView(APIView):
         resp = rag_chain.invoke(query)
         #print(response)
         return Response(data={"response": resp}, status=status.HTTP_200_OK)
+
+
+class Signup(APIView):
+    def post(self, request):
+        serializer = ProfileSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

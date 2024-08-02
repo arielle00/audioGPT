@@ -165,7 +165,7 @@ export default function Chat() {
           setCurrTemplate(name);
           setSysPrompt(sysPrompt);
           setNotification(`Template "${name}" has been selected!`);
-          setTimeout(() => setNotification(""), 2500);
+          setTimeout(() => setNotification(""), 2000);
         }}
       />
     </div>
