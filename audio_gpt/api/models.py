@@ -7,10 +7,7 @@ class FileSave(models.Model):
 
 
 class ProfileSave(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     email = models.EmailField()
     password = models.TextField()
     apikey = models.TextField()
 
-    def __str__(self):
-        return f"{self.user.username} - {self.email}"
