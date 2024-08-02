@@ -11,4 +11,4 @@ class FileSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfileSave
-        fields = ('user', 'email', 'password', 'apikey')
+        fields = ('username', 'email', 'password', 'apikey')

@@ -48,7 +48,7 @@ const signupFields=[
 function Signup() {
     const navigate = useNavigate();
 
-    const [signupState,setSignupState]=useState({
+    const [signupState, setSignupState]=useState({
         username: "",
         email: "",
         password: "",
@@ -65,9 +65,36 @@ function Signup() {
     };
 
    
-    const handleSubmit=(e)=>{
+    const handleSubmit= async (e) =>{
         e.preventDefault();
         navigate('/login')
+        
+        const signupData = {
+            username: signupState.username,  // Assuming you want to send the username, adjust if needed
+            email: signupState.email,
+            password: signupState.password,
+            apikey: signupState.apikey
+        };
+        
+        try {
+            const response = await fetch('/api/signup', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(signupData),
+            });
+      
+            if (response.ok) {
+              const data = await response.json();
+              console.log(data);
+            } else {
+              console.error('Error submitting data');
+            }
+        } 
+        catch (error) {
+            console.error('Error:', error);
+        }
     }
     
     const fixedInputClass = "bg-vanilla appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-brown focus:border-brown focus:z-10 sm:text-sm ";
