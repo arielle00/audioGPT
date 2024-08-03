@@ -125,14 +125,14 @@ export default function Chat() {
   }
 
   return (
-    <div>
+
       <div className="justify-center flex flex-col inset-0 space-x-4 p-4 items-center bg-gray h-screen">
-      {notification && (
-            <div className="fixed flex bg-green-500 text-white p-2 rounded-lg shadow-lg transition-opacity duration-500 opacity-100">
-              {notification}
-            </div>
-          )}
-        <div className="center flex flex-col bg-vanilla rounded-lg shadow-md p-4 w-3/4 h-[80vh]">
+        {notification && (
+              <div className="fixed flex bg-green-500 text-white p-2 rounded-lg shadow-lg transition-opacity duration-500 opacity-100">
+                {notification}
+              </div>
+            )}
+        <div className="center flex flex-col bg-vanilla rounded-lg shadow-md mt-9 p-4 w-3/4 h-[80vh]">
           <div className="flex flex-row justify-between items-center">
             <Clear onClick={clearChat} className=" w-15 h-15" />
             <h3 className="text-lg font-semibold">CHAT MESSAGES</h3>
@@ -157,8 +157,7 @@ export default function Chat() {
           />
           
         </div>
-      </div>
-      <Modal
+        <Modal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
         onSelect={(sysPrompt, name) => {
@@ -168,6 +167,7 @@ export default function Chat() {
           setTimeout(() => setNotification(""), 2000);
         }}
       />
-    </div>
+      </div>
+      
   );
 }
