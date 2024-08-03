@@ -6,22 +6,22 @@ import Layout from './Layout';
 import Login from './Login';
 import Signup from './Signup';
 
-
 const router = createBrowserRouter([
   {
     path: '/',
-    element: React.createElement(Layout),
+    element: <Layout />,
     children: [
-      { path: '/', element: React.createElement(TestHomePage) },
-      { path: 'chat/', element: React.createElement(Chat) },
-      { path:  'login/', element: React.createElement(Login)},
-      { path:  'signup/', element: React.createElement(Signup)},
+      { path: '/', element: <TestHomePage /> },
+      { path: 'chat/', element: <Chat /> },
+      { path: 'login/', element: <Login /> },
+      { path: 'signup/', element: <Signup /> },
     ],
   },
 ]);
 
 const App = () => {
-  return React.createElement(RouterProvider, { router: router });
+  return <RouterProvider router={router} />;
 };
 
 export default App;
+

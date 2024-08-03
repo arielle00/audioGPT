@@ -3,11 +3,13 @@ import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 
 const Layout = () => {
-  return React.createElement(
-    'div',
-    null,
-    React.createElement(Navbar, null),
-    React.createElement(Outlet, null)
+  return (
+    <div>
+      <Navbar />
+      <div className="pt-10">
+      <Outlet />
+      </div>
+    </div>
   );
 };
 
