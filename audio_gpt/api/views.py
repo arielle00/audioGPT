@@ -1,4 +1,5 @@
 from django.shortcuts import render
+import hashlib
 # from django.http import HttpResponse
 from rest_framework import generics, status
 from .serializers import  FileSerializer
@@ -145,11 +146,26 @@ class MessageView(APIView):
 
 
 class Signup(APIView):
+    hash = hashlib.sha256()
+
     def post(self, request):
-        print("test")
-        print(request.data)
-        serializer = ProfileSerializer(data=request.data)
+        username = request.data.get('username')
+        email = request.data.get('email')
+        password = request.data.get('password')
+        apikey = request.data.get('apikey')
+
+        hash.update(password.encode('utf-8'))
+        encrypted_password = hash.hexdigest()
         
+        data = {
+            'username': username,
+            'email': email,
+            'password': encrypted_password,
+            'apikey': apikey
+        }
+
+        serializer = ProfileSerializer(data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
