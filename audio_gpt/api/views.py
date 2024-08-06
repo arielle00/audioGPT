@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import hashlib
+from cryptography.fernet import Fernet
 # from django.http import HttpResponse
 from rest_framework import generics, status
 from .serializers import  FileSerializer
@@ -146,7 +147,6 @@ class MessageView(APIView):
 
 
 class Signup(APIView):
-    hash = hashlib.sha256()
 
     def post(self, request):
         username = request.data.get('username')
@@ -154,17 +154,23 @@ class Signup(APIView):
         password = request.data.get('password')
         apikey = request.data.get('apikey')
 
+        hash = hashlib.sha256()
         hash.update(password.encode('utf-8'))
         encrypted_password = hash.hexdigest()
         
+        key = Fernet.generate_key()
+        fernet = Fernet(key)
+
+        encAPIKey = fernet.encrypt(apikey.encode())
+
         data = {
             'username': username,
             'email': email,
             'password': encrypted_password,
-            'apikey': apikey
+            'apikey': encAPIKey
         }
 
-        serializer = ProfileSerializer(data=request.data)
+        serializer = ProfileSerializer(data=data)
 
         if serializer.is_valid():
             serializer.save()
