@@ -17,15 +17,12 @@ from dotenv import load_dotenv
 import os
 
 from decouple import config
-#os.environ['LANGCHAIN_TRACING_V2'] = 'true'
-#os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
+
 openai.api_key = settings.OPENAI_API_KEY
 langchain_api_key = os.getenv('LANGCHAIN_API_KEY', 'default_langchain_key')
-#openai_api_key = os.getenv('OPENAI_API_KEY', 'default_openai_key')
+
 model_name = "gpt-3.5-turbo"
-# Set the environment variables explicitly
 os.environ['LANGCHAIN_API_KEY'] = langchain_api_key
-#os.environ['OPENAI_API_KEY'] = openai_api_key
 
 import bs4
 from langchain import hub
@@ -161,7 +158,7 @@ class Signup(APIView):
         key = Fernet.generate_key()
         fernet = Fernet(key)
 
-        encAPIKey = fernet.encrypt(apikey.encode())
+        encAPIKey = fernet.encrypt(apikey.encode()).decode()
 
         data = {
             'username': username,
