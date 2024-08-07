@@ -5,6 +5,7 @@ from cryptography.fernet import Fernet
 from rest_framework import generics, status
 from .serializers import  FileSerializer
 from .serializers import  ProfileSerializer
+from .models import ProfileSave
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -154,6 +155,52 @@ class Signup(APIView):
         hash = hashlib.sha256()
         hash.update(password.encode('utf-8'))
         encrypted_password = hash.hexdigest()
+        
+        key = Fernet.generate_key()
+        fernet = Fernet(key)
+
+        encAPIKey = fernet.encrypt(apikey.encode()).decode()
+
+        data = {
+            'username': username,
+            'email': email,
+            'password': encrypted_password,
+            'apikey': encAPIKey
+        }
+
+        serializer = ProfileSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class Login(APIView):
+
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        hash = hashlib.sha256()
+        hash.update(password.encode('utf-8'))
+        encrypted_password = hash.hexdigest()
+
+        try:
+            # Retrieve the user with the given email
+            user = ProfileSave.objects.get(email=email)
+            
+            # Check if the provided password matches the stored hashed password
+            if encrypted_password == user.password:
+                # Password is correct, login successful
+                return Response({'message': 'Login successful'}, status=status.HTTP_200_OK)
+            else:
+                # Password is incorrect
+                return Response({'error': 'Invalid email or password'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except ProfileSave.DoesNotExist:
+            # No user found with the provided email
+            return Response({'error': 'Invalid email or password'}, status=status.HTTP_400_BAD_REQUEST)
         
         key = Fernet.generate_key()
         fernet = Fernet(key)

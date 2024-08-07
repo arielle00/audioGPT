@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const loginFields = [
     {
@@ -23,10 +24,7 @@ const loginFields = [
     }
 ];
 
-const handleSubmit=(e)=>{
-    e.preventDefault();
-    // authenticateUser();
-}
+
 
 const handleSignUp=(e)=>{
     e.preventDefault();
@@ -34,6 +32,7 @@ const handleSignUp=(e)=>{
 
 
 function Login() {
+    const navigate = useNavigate();
     const [formState, setFormState] = useState({
         email: "",
         password: ""
@@ -46,6 +45,39 @@ function Login() {
             [name]: value
         }));
     };
+
+
+    const handleSubmit= async (e) =>{
+        e.preventDefault();
+        
+        
+        const loginData = {
+            // Assuming you want to send the username, adjust if needed
+            email: formState.email,
+            password: formState.password,
+        };
+        
+        try {
+            const response = await fetch('/api/login', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(loginData),
+            });
+      
+            if (response.ok) {
+              const data = await response.json();
+              console.log(data);
+              navigate('/home')
+            } else {
+              console.error('Error submitting data');
+            }
+        } 
+        catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
     const fixedInputClass = "bg-vanilla appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ";
 

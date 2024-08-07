@@ -11,7 +11,7 @@ const signupFields=[
         type:"text",
         autoComplete:"username",
         isRequired:true,
-        placeholder:"Username"   
+        placeholder:"Username"
     },
     {
         labelText:"Email address",
@@ -67,7 +67,7 @@ function Signup() {
    
     const handleSubmit= async (e) =>{
         e.preventDefault();
-        navigate('/login')
+        navigate('/')
         
         const signupData = {
             username: signupState.username,  // Assuming you want to send the username, adjust if needed

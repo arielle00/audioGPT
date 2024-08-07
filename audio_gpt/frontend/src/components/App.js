@@ -8,15 +8,22 @@ import Signup from './Signup';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: 'home/',
     element: <Layout />,
     children: [
-      { path: '/', element: <TestHomePage /> },
       { path: 'chat/', element: <Chat /> },
-      { path: 'login/', element: <Login /> },
-      { path: 'signup/', element: <Signup /> },
+      { path: '', element: <TestHomePage /> },
     ],
   },
+  {
+    path: '/',
+    element: <Login />
+  },
+  { 
+    path: 'signup/', 
+    element: <Signup /> 
+  }
+  
 ]);
 
 const App = () => {
