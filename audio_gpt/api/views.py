@@ -2,6 +2,7 @@ from django.shortcuts import render
 import hashlib
 from cryptography.fernet import Fernet
 from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate
 # from django.http import HttpResponse
 from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
@@ -167,19 +168,18 @@ class Signup(APIView):
         fernet = Fernet(key)
 
         encAPIKey = fernet.encrypt(apikey.encode()).decode()
-
+        user.apikey = encAPIKey
         data = {
             'username': user.username,
             'email': user.email,
             'password': user.password,  # Use Django's set_password method for hashing
-            'apikey': encAPIKey
+            'apikey': user.apikey
         }
 
         serializer = CustomProfileSerializer(data=data)
 
         if serializer.is_valid():
-            user.save()
-            #serializer.save()
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -193,6 +193,8 @@ class Login(APIView):
         print(serializer.errors)
         if serializer.is_valid():
             user = serializer.validated_data['user']
+            print(user.email)
+            #user = authenticate(username=serializer.email, password=serializer.password)
             login(request, user)
             
             # Generate or get an existing token for the user
