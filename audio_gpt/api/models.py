@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 class FileSave(models.Model):
     audio_name = models.CharField(max_length=50)
@@ -10,4 +11,11 @@ class ProfileSave(models.Model):
     email = models.EmailField()
     password = models.TextField()
     apikey = models.TextField()
+
+class CustomProfile(AbstractUser):
+    apikey = models.TextField()
+
+    def __str__(self):
+        return self.username
+
 

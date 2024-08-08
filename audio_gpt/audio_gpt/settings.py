@@ -48,9 +48,20 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api.apps.ApiConfig',
     'rest_framework',
+    'rest_framework.authtoken',
     'frontend.apps.FrontendConfig',
+    'audio_gpt',
+    
 
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
+
+AUTH_USER_MODEL = "api.CustomProfile"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

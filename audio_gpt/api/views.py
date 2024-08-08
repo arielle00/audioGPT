@@ -3,9 +3,11 @@ import hashlib
 from cryptography.fernet import Fernet
 # from django.http import HttpResponse
 from rest_framework import generics, status
+from rest_framework.authtoken.models import Token
 from .serializers import  FileSerializer
-from .serializers import  ProfileSerializer
+from .serializers import  ProfileSerializer, CustomProfileSerializer, LoginSerializer
 from .models import ProfileSave
+from django.contrib.auth import login
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -168,7 +170,7 @@ class Signup(APIView):
             'apikey': encAPIKey
         }
 
-        serializer = ProfileSerializer(data=data)
+        serializer = CustomProfileSerializer(data=data)
 
         if serializer.is_valid():
             serializer.save()
@@ -177,46 +179,20 @@ class Signup(APIView):
     
 
 class Login(APIView):
-
     def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
-
-        hash = hashlib.sha256()
-        hash.update(password.encode('utf-8'))
-        encrypted_password = hash.hexdigest()
-
-        try:
-            # Retrieve the user with the given email
-            user = ProfileSave.objects.get(email=email)
-            
-            # Check if the provided password matches the stored hashed password
-            if encrypted_password == user.password:
-                # Password is correct, login successful
-                return Response({'message': 'Login successful'}, status=status.HTTP_200_OK)
-            else:
-                # Password is incorrect
-                return Response({'error': 'Invalid email or password'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        except ProfileSave.DoesNotExist:
-            # No user found with the provided email
-            return Response({'error': 'Invalid email or password'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        key = Fernet.generate_key()
-        fernet = Fernet(key)
-
-        encAPIKey = fernet.encrypt(apikey.encode()).decode()
-
-        data = {
-            'username': username,
-            'email': email,
-            'password': encrypted_password,
-            'apikey': encAPIKey
-        }
-
-        serializer = ProfileSerializer(data=data)
-
+        print(request.data)
+        serializer = LoginSerializer(data=request.data)
+        print(serializer.is_valid())
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            user = serializer.validated_data['user']
+            login(request, user)
+            
+            # Generate or get an existing token for the user
+            token, created = Token.objects.get_or_create(user=user)
+
+            return Response({
+                'token': token.key,
+                'username': user.username,
+                'email': user.email
+            }, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
