@@ -1,6 +1,7 @@
 from django.shortcuts import render
 import hashlib
 from cryptography.fernet import Fernet
+from django.contrib.auth import get_user_model
 # from django.http import HttpResponse
 from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
@@ -154,9 +155,13 @@ class Signup(APIView):
         password = request.data.get('password')
         apikey = request.data.get('apikey')
 
-        hash = hashlib.sha256()
-        hash.update(password.encode('utf-8'))
-        encrypted_password = hash.hexdigest()
+        # Create a new user instance
+        user = get_user_model()()  # This creates an instance of the CustomProfile model
+
+        # Set user details
+        user.username = username
+        user.email = email
+        user.set_password(password)
         
         key = Fernet.generate_key()
         fernet = Fernet(key)
@@ -164,17 +169,19 @@ class Signup(APIView):
         encAPIKey = fernet.encrypt(apikey.encode()).decode()
 
         data = {
-            'username': username,
-            'email': email,
-            'password': encrypted_password,
+            'username': user.username,
+            'email': user.email,
+            'password': user.password,  # Use Django's set_password method for hashing
             'apikey': encAPIKey
         }
 
         serializer = CustomProfileSerializer(data=data)
 
         if serializer.is_valid():
-            serializer.save()
+            user.save()
+            #serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
@@ -183,6 +190,7 @@ class Login(APIView):
         print(request.data)
         serializer = LoginSerializer(data=request.data)
         print(serializer.is_valid())
+        print(serializer.errors)
         if serializer.is_valid():
             user = serializer.validated_data['user']
             login(request, user)

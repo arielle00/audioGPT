@@ -36,6 +36,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTHENTICATION_BACKENDS = [
+    'api.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',  # Keep the default backend as a fallback
+]
+
 
 # Application definition
 

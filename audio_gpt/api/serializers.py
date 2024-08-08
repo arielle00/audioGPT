@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import FileSave
 from .models import ProfileSave, CustomProfile
+from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 
 
@@ -17,22 +18,22 @@ class ProfileSerializer(serializers.ModelSerializer):
 class CustomProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomProfile
-        fields = ['id', 'username', 'email', 'apikey']
+        fields = ('username', 'password', 'email', 'apikey')
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    password = serializers.CharField(write_only=True)
+    email = serializers.CharField()
+    password = serializers.CharField()
 
     def validate(self, data):
-        username = data.get('username')
+        email = data.get('email')
         password = data.get('password')
-        
-        if username and password:
-            user = authenticate(username=username, password=password)
+        print(email, password)
+        if email and password:
+            user = authenticate(username=email, password=password)
             if user is None:
-                raise serializers.ValidationError("Invalid username or password.")
+                raise serializers.ValidationError("Invalid email or password.")
         else:
-            raise serializers.ValidationError("Must include 'username' and 'password'.")
+            raise serializers.ValidationError("Must include 'email' and 'password'.")
         
         data['user'] = user
         return data
