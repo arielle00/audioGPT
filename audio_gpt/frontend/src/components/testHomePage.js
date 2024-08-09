@@ -61,7 +61,7 @@ function TestHomePage() {
       </div>
       
       <div className="flex justify-center items-center flex-1 bg-gray">
-        <div className="outline-dashed p-8 bg-vanilla rounded-lg shadow-md w-96">
+        <div className="outline-dashed p-8 bg-vanilla rounded-lg shadow-md w-130">
           <h1 className="text-2xl font-bold mb-4">Please Upload Your Audio File (mp3)</h1>
           <div className="flex flex-row items-center space-x-2">
             <input
