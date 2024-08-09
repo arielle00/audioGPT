@@ -34,7 +34,6 @@ export default function Navbar() {
             <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
               <i className="fas fa-user" style={{ fontSize: '24px' }}></i>
             </Dropdown.Toggle>
-
             <Dropdown.Menu>
               <Dropdown.Item href="/profile">Profile</Dropdown.Item>
               <Dropdown.Item href="/settings">Settings</Dropdown.Item>

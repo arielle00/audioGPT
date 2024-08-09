@@ -187,10 +187,10 @@ class Signup(APIView):
 
 class Login(APIView):
     def post(self, request):
-        print(request.data)
+        # print(request.data)
         serializer = LoginSerializer(data=request.data)
-        print(serializer.is_valid())
-        print(serializer.errors)
+        # print(serializer.is_valid())
+        # print(serializer.errors)
         if serializer.is_valid():
             user = serializer.validated_data['user']
             print(user.email)

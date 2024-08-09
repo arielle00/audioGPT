@@ -101,11 +101,17 @@ function Signup() {
     
     return (
         <div className="bg-gray text-white flex flex-col items-center justify-center h-screen">
-            <h1 className="text-2xl font-bold">Sign up</h1>
+            <div className="flex justify-center items-center bg-gray">
+                <p className="underline decoration-wavy text-raisin normal-case font-mono font-bold text-5xl bg-gray">
+                AudioGPT
+                </p> 
+            </div>
+
+            <h1 className="text-2xl pt-36 font-bold">Sign up</h1>
             <form className="mt-8 space-y-6" onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '400px' }}>
-                <div className="">
+                <div className="space-y-2">
                     {signupFields.map((field) => (
-                        <div key={field.id} className="mb-4">
+                        <div key={field.id} className="">
                             <label htmlFor={field.id} className="sr-only">
                                 {field.labelText}
                             </label>
@@ -125,7 +131,7 @@ function Signup() {
 
                 <button
                     type="submit"
-                    className="group bg-brown relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white hover:bg-raisin focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 mt-10"
+                    className="group bg-brown relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white hover:bg-raisin focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amythest mt-10"
                 >
                     Signup
                 </button>
