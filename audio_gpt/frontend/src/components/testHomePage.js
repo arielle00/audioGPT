@@ -54,7 +54,7 @@ function TestHomePage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-200">
-      <div className="flex justify-center items-center py-10 bg-gray">
+      <div className="flex justify-center items-center pt-28 py-10 bg-gray">
         <p className="underline decoration-wavy text-raisin normal-case font-mono font-bold text-5xl bg-gray">
           AudioGPT
         </p> 

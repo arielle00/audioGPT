@@ -37,6 +37,8 @@
     "@mui/icons-material": "^5.15.20",
     "@mui/material": "^5.15.20",
     "axios": "^1.7.2",
+    "bootstrap": "^5.3.3",
+    "react-bootstrap": "^2.10.4",
     "react-router-dom": "^6.23.1"
   }
 }
