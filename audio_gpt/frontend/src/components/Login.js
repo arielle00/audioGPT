@@ -31,7 +31,7 @@ function Login() {
         password: ""
     });
 
-    const [loginSuccess, setLoginSuccess] = useState(true);
+    const [loginFailed, setLoginFailed] = useState(false);
     const [fadeOut, setFadeOut] = useState(false);
     const [showMessage, setShowMessage] = useState(false); // Initially false
 
@@ -44,7 +44,7 @@ function Login() {
     };
 
     useEffect(() => {
-        if (!loginSuccess) {
+        if (loginFailed) {
             // Reset the states to show the message again
             setShowMessage(true);
             setFadeOut(false);
@@ -57,9 +57,10 @@ function Login() {
             // Remove the message from the DOM after the fade-out transition (e.g., 1 second later)
             const timer2 = setTimeout(() => {
                 setShowMessage(false);
+                setLoginFailed(false);
             }, 2500); // 1500ms + 1000ms (transition duration)
 
-            // Clean up the timers on component unmount or when loginSuccess changes
+            // Clean up the timers on component unmount or when loginFailed changes
             return () => {
                 clearTimeout(timer1);
                 clearTimeout(timer2);
@@ -69,7 +70,7 @@ function Login() {
             setShowMessage(false);
             setFadeOut(false);
         }
-    }, [loginSuccess]);
+    }, [loginFailed]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -94,11 +95,11 @@ function Login() {
                 navigate('/home');
             } else {
                 console.error('Error submitting data');
-                setLoginSuccess(false); // Trigger the error message
+                setLoginFailed(true); // Trigger the error message
             }
         } catch (error) {
             console.error('Error:', error);
-            setLoginSuccess(false); // Trigger the error message
+            setLoginFailed(true); // Trigger the error message
         }
     }
 
