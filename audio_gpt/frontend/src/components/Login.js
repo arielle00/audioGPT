@@ -58,7 +58,7 @@ function Login() {
             const timer2 = setTimeout(() => {
                 setShowMessage(false);
                 setLoginFailed(false);
-            }, 2500); // 1500ms + 1000ms (transition duration)
+            }, 1500); // 1500ms + 1000ms (transition duration)
 
             // Clean up the timers on component unmount or when loginFailed changes
             return () => {
@@ -138,7 +138,7 @@ function Login() {
                 </button>
             </form>
             
-            <div className="pt-5">
+            <div className="h-8 mt-4">
                 {showMessage && (
                     <div className={`flex items-center px-4 p-3 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 transition-opacity duration-1000 ${fadeOut ? 'opacity-0' : 'opacity-100'}`} role="alert">
                         <svg
