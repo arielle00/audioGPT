@@ -24,14 +24,6 @@ const loginFields = [
     }
 ];
 
-
-
-const handleSignUp=(e)=>{
-    e.preventDefault();
-}
-
-
-
 function Login() {
     const navigate = useNavigate();
     const [formState, setFormState] = useState({
@@ -39,9 +31,9 @@ function Login() {
         password: ""
     });
 
-    const [loginSuccess, setLoginSuccess] = useState(
-        true
-    );
+    const [loginSuccess, setLoginSuccess] = useState(true);
+    const [fadeOut, setFadeOut] = useState(false);
+    const [showMessage, setShowMessage] = useState(false); // Initially false
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -51,49 +43,62 @@ function Login() {
         }));
     };
 
-    const [fadeOut, setFadeOut] = useState(false);
-
     useEffect(() => {
         if (!loginSuccess) {
-        const timer = setTimeout(() => {
-            setFadeOut(true);
-        }, 1500);
-        return () => clearTimeout(timer);
+            // Reset the states to show the message again
+            setShowMessage(true);
+            setFadeOut(false);
+
+            // Start the fade-out after 1.5 seconds
+            const timer1 = setTimeout(() => {
+                setFadeOut(true);
+            }, 1500);
+
+            // Remove the message from the DOM after the fade-out transition (e.g., 1 second later)
+            const timer2 = setTimeout(() => {
+                setShowMessage(false);
+            }, 2500); // 1500ms + 1000ms (transition duration)
+
+            // Clean up the timers on component unmount or when loginSuccess changes
+            return () => {
+                clearTimeout(timer1);
+                clearTimeout(timer2);
+            };
+        } else {
+            // Reset the message display if login is successful
+            setShowMessage(false);
+            setFadeOut(false);
         }
     }, [loginSuccess]);
 
-
-    const handleSubmit= async (e) =>{
+    const handleSubmit = async (e) => {
         e.preventDefault();
         
-        
         const loginData = {
-            // Assuming you want to send the username, adjust if needed
             email: formState.email,
             password: formState.password,
         };
         
         try {
             const response = await fetch('/api/login', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(loginData),
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(loginData),
             });
-      
+
             if (response.ok) {
-              const data = await response.json();
-              console.log(data);
-              navigate('/home')
+                const data = await response.json();
+                console.log(data);
+                navigate('/home');
             } else {
-              console.error('Error submitting data');
-              console.log(response);
-              setLoginSuccess(false);
+                console.error('Error submitting data');
+                setLoginSuccess(false); // Trigger the error message
             }
-        } 
-        catch (error) {
+        } catch (error) {
             console.error('Error:', error);
+            setLoginSuccess(false); // Trigger the error message
         }
     }
 
@@ -103,11 +108,10 @@ function Login() {
         <div className="bg-gray text-white flex flex-col items-center justify-center h-screen">
             <div className="flex justify-center items-center bg-gray">
                 <p className="underline decoration-wavy text-raisin normal-case font-mono font-bold text-5xl bg-gray">
-                AudioGPT
+                    AudioGPT
                 </p> 
             </div>
             
-           
             <h1 className="text-2xl pt-36 font-bold">Log in</h1>
             <form className="mt-8 space-y-6" onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '400px' }}>
                 <div className="space-y-2">
@@ -134,7 +138,7 @@ function Login() {
             </form>
             
             <div className="pt-5">
-                {!loginSuccess && (
+                {showMessage && (
                     <div className={`flex items-center px-4 p-3 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 transition-opacity duration-1000 ${fadeOut ? 'opacity-0' : 'opacity-100'}`} role="alert">
                         <svg
                             className="flex-shrink-0 inline w-4 h-4 me-3"
