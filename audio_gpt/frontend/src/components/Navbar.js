@@ -24,6 +24,7 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const token =  localStorage.getItem('authToken');
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -32,12 +33,14 @@ export default function Navbar() {
               const response = await fetch('/api/logout', {
                   method: 'POST',
                   headers: {
+                      'Authorization': `Token ${token}`,
                       'Content-Type': 'application/json',
                   },
                   body: JSON.stringify(),
               });
   
               if (response.ok) {
+                  localStorage.removeItem('authToken');  
                   const data = await response.json();
                   console.log(data);
                   navigate('/');

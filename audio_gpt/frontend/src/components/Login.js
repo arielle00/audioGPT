@@ -91,7 +91,8 @@ function Login() {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log(data);
+                const token = data.token;
+                localStorage.setItem('authToken', token);
                 navigate('/home');
             } else {
                 console.error('Error submitting data');

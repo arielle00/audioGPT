@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 import hashlib
 from cryptography.fernet import Fernet
 from django.contrib.auth import get_user_model
@@ -34,14 +36,17 @@ from langchain_core.document_loaders import BaseLoader
 from langchain.schema import Document
 
 
-# openai.api_key = settings.OPENAI_API_KEY
-# langchain_api_key = os.getenv('LANGCHAIN_API_KEY', 'default_langchain_key')
+fernet_key = os.getenv('FERNET_KEY')
+fernet = Fernet(fernet_key)
+
+langchain_api_key = os.getenv('LANGCHAIN_API_KEY', 'default_langchain_key')
 
 model_name = "gpt-3.5-turbo"
-# os.environ['LANGCHAIN_API_KEY'] = langchain_api_key
+os.environ['LANGCHAIN_API_KEY'] = langchain_api_key
 
 load_dotenv()
 class AudioFileView(APIView):
+    authentication_classes = [TokenAuthentication]
     serializer_class = FileSerializer
 
     def post(self, request, format=None):
@@ -50,24 +55,17 @@ class AudioFileView(APIView):
             return f"postgresql+psycopg2://{db_settings['USER']}:{db_settings['PASSWORD']}@{db_settings['HOST']}:{db_settings['PORT']}/{db_settings['NAME']}"
         data = request.data.copy()
         audiofile = request.FILES['audio_file']
-        # print("-----" + str(audiofile))
-
         serializer = self.serializer_class(data=request.data)
         
         data.update(request.FILES)
         print(serializer.is_valid())
 
         if serializer.is_valid():
-            user = request.user
-            apikey = user.apikey
-            langchainkey = user.langchainkey
-
             audio_name = data.get('audio_name')
             audio_file = data.get('audio_file')
 
-            aai.settings.api_key = apikey
+            aai.settings.api_key = os.getenv('ASSEMBLYAI_API_KEY')
             transcriber = aai.Transcriber()
-
             transcript = transcriber.transcribe(audio_file)
 
             class StringDocumentLoader(BaseLoader):
@@ -80,13 +78,9 @@ class AudioFileView(APIView):
             loader = StringDocumentLoader(transcript.text)
             documents = loader.load()
 
-            # print(documents)
-
             docs = loader.load()
             text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
             splits = text_splitter.split_documents(docs)
-
-            # print(len(splits))
 
             embeddings = OpenAIEmbeddings()
 
@@ -100,28 +94,36 @@ class AudioFileView(APIView):
             
 
 class MessageView(APIView):
+    authentication_classes = [TokenAuthentication]
+    
     def post(self, request, format=None):
         def get_postgresql_connection_string():
             db_settings = settings.DATABASES['default']
             return f"postgresql+psycopg2://{db_settings['USER']}:{db_settings['PASSWORD']}@{db_settings['HOST']}:{db_settings['PORT']}/{db_settings['NAME']}"
         data=request.data
-        print(data.get('input'))
-        llm = ChatOpenAI(model_name=model_name, temperature=0)
+        
+        user = request.user
+        openai_api_key = user.apikey
+        encrypted_api_key_bytes = openai_api_key.encode('utf-8')
+        decrypted_data = fernet.decrypt(encrypted_api_key_bytes)
+        decrypted_text = decrypted_data.decode('utf-8')
+
+
+        llm = ChatOpenAI(model_name=model_name, temperature=0, openai_api_key=decrypted_text)
         connection = get_postgresql_connection_string()
         COLLECTION_NAME = "my_audio"
-        embeddings = OpenAIEmbeddings()
+        embeddings = OpenAIEmbeddings(openai_api_key=decrypted_text)
         prompt = hub.pull("rlm/rag-prompt")
         db = PGVector(embeddings=embeddings, collection_name=COLLECTION_NAME, connection=connection, use_jsonb=True)
         def format_docs(docs):
             return "\n\n".join(doc.page_content for doc in docs)
         retriever = db.as_retriever(
             search_kwargs={"k": 10}
-            )
+        )
        
         
         query = data.get('input')
         systemPrompt = data.get('sysPrompt')
-        # response = qa_stuff.run(query)
         template = systemPrompt + """
 
         {context}
@@ -136,9 +138,13 @@ class MessageView(APIView):
             | llm
             | StrOutputParser()
         )
+
+        try:
+            resp = rag_chain.invoke(query)
+        except Exception as e:
+            return Response({"error": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         
-        resp = rag_chain.invoke(query)
-        #print(response)
         return Response(data={"response": resp}, status=status.HTTP_200_OK)
 
 
@@ -159,8 +165,6 @@ class Signup(APIView):
         user.email = email
         user.set_password(password)
 
-        fernet_key = os.getenv('FERNET_KEY')
-        fernet = Fernet(fernet_key)
 
         encAPIKey = fernet.encrypt(apikey.encode()).decode()
         user.apikey = encAPIKey
@@ -190,9 +194,9 @@ class Login(APIView):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data['user']
-            print(user.email)
-            #user = authenticate(username=serializer.email, password=serializer.password)
+            print(request.user.is_authenticated)
             login(request, user)
+            print(request.user.is_authenticated)
             
             # Generate or get an existing token for the user
             token, created = Token.objects.get_or_create(user=user)
@@ -205,7 +209,7 @@ class Login(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class Logout(APIView):
+    authentication_classes = [TokenAuthentication]
     def post(self, request):
-        print(request)
-        logout(request)
-        return Response({"ok":True}, status=status.HTTP_200_OK)
+        request.user.auth_token.delete()
+        return Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)

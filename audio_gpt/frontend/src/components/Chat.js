@@ -56,16 +56,19 @@ export default function Chat() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [history, setHistory] = useState([]);
+  const [errorKey, setErrorKey] = useState(false);
   const messagesEndRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [fadeOut, setFadeOut] = useState(false);
   const [sysPrompt, setSysPrompt] = useState(`You are a helpful AI assistant who can provide valuable insights and detailed explanations.
       If you can, use the context provided to help answer the questions. Please give very detailed answers combining
       what you inherently know with the context to give a unique and interesting point of view. If there is no context,
       go based off what you know inherently. Please end by saying "Hopefully this answers your question!"`)
   const [currTemplate, setCurrTemplate] = useState("GenericGPT")
-  const [notification, setNotification] = useState("");
-  
+  const [notification, setNotification] = useState({ message: '', color: '' , type:''});
+  const token =  localStorage.getItem('authToken');
+
   const addMessage = (newMessage) => {
     setMessages(prevMessages => [...prevMessages, newMessage]);
   };
@@ -94,12 +97,14 @@ export default function Chat() {
     addMessage(newMessage);
     setInput("");
     setLoading(true);
-    
+  
+
     try {
       const response = await fetch('/api/add-message', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`,
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ input, sysPrompt }),
       });
@@ -111,6 +116,8 @@ export default function Chat() {
         addMessage(newMessageBot);
       } else {
         console.error('Error submitting data');
+        setErrorKey(true)
+        setNotification({ message: 'Invalid OpenAI Key', color: 'red', type:'error' });
       }
     } catch (error) {
       console.error('Error:', error);
@@ -127,11 +134,16 @@ export default function Chat() {
   return (
 
       <div className="justify-center flex flex-col inset-0 space-x-4 p-4 items-center bg-gray h-screen">
-        {notification && (
-              <div className="fixed flex bg-green-500 text-white p-2 rounded-lg shadow-lg transition-opacity duration-500 opacity-100">
-                {notification}
+        {notification.type==='error' && (
+              <div className="fixed bg-${notification.color}-500 flex text-white p-2 rounded-lg shadow-lg transition-opacity duration-500 opacity-100">
+                {notification.message}
               </div>
-            )}
+        )}
+        {/* {notification.type==='modal' && (
+              <div className="fixed bg-${notification.color}-500 flex text-white p-2 rounded-lg shadow-lg transition-opacity duration-500 opacity-100">
+                {notification.message}
+              </div>
+        )} */}
         <div className="center flex flex-col bg-vanilla rounded-lg shadow-md mt-9 p-4 w-3/4 h-[80vh]">
           <div className="flex flex-row justify-between items-center">
             <Clear onClick={clearChat} className=" w-15 h-15" />
@@ -158,16 +170,16 @@ export default function Chat() {
           
         </div>
         <Modal
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
-        onSelect={(sysPrompt, name) => {
-          setCurrTemplate(name);
-          setSysPrompt(sysPrompt);
-          setNotification(`Template "${name}" has been selected!`);
-          setTimeout(() => setNotification(""), 2000);
-        }}
-      />
-      </div>
+          isOpen={isModalOpen}
+          onClose={() => setModalOpen(false)}
+          onSelect={(sysPrompt, name) => {
+            setCurrTemplate(name);
+            setSysPrompt(sysPrompt);
+            setNotification({message:'Template "${name}" has been selected!', color:'green', type:'modal'});
+            setTimeout(() => setNotification(""), 2000);
+          }}
+        />
+    </div>
       
   );
 }
