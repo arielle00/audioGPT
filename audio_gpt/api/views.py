@@ -7,8 +7,7 @@ from django.contrib.auth import authenticate
 from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
 from .serializers import  FileSerializer
-from .serializers import  ProfileSerializer, CustomProfileSerializer, LoginSerializer
-from .models import ProfileSave
+from .serializers import CustomProfileSerializer, LoginSerializer
 from django.contrib.auth import login
 from django.conf import settings
 from rest_framework.views import APIView
