@@ -43,6 +43,16 @@ const signupFields=[
         isRequired:true,
         placeholder:"API Key"   
     },
+    {
+        labelText:"Langchain Key",
+        labelFor:"langchainkey",
+        id:"langchainkey",
+        name:"langchainkey",
+        type:"text",
+        autoComplete:"langchainkey",
+        isRequired:true,
+        placeholder:"Langchain Key"   
+    },
 ];
 
 function Signup() {
@@ -52,7 +62,8 @@ function Signup() {
         username: "",
         email: "",
         password: "",
-        apikey: ""
+        apikey: "",
+        langchainkey: "",
 
     });
 
@@ -73,7 +84,8 @@ function Signup() {
             username: signupState.username,  // Assuming you want to send the username, adjust if needed
             email: signupState.email,
             password: signupState.password,
-            apikey: signupState.apikey
+            apikey: signupState.apikey,
+            langchainkey: signupState.langchainkey
         };
         
         try {

@@ -7,9 +7,8 @@ from django.contrib.auth import authenticate
 from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
 from .serializers import  FileSerializer
-from .serializers import  ProfileSerializer, CustomProfileSerializer, LoginSerializer
-from .models import ProfileSave
-from django.contrib.auth import login, logout
+from .serializers import CustomProfileSerializer, LoginSerializer
+from django.contrib.auth import login
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -155,6 +154,7 @@ class Signup(APIView):
         email = request.data.get('email')
         password = request.data.get('password')
         apikey = request.data.get('apikey')
+        langchainkey = request.data.get('langchainkey')
 
         # Create a new user instance
         user = get_user_model()()  # This creates an instance of the CustomProfile model
@@ -169,11 +169,16 @@ class Signup(APIView):
 
         encAPIKey = fernet.encrypt(apikey.encode()).decode()
         user.apikey = encAPIKey
+        
+        encLangChainKey = fernet.encrypt(langchainkey.encode()).decode()
+        user.langchainkey = encLangChainKey
+
         data = {
             'username': user.username,
             'email': user.email,
             'password': user.password,  # Use Django's set_password method for hashing
-            'apikey': user.apikey
+            'apikey': user.apikey,
+            'langchainkey': user.langchainkey
         }
 
         serializer = CustomProfileSerializer(data=data)

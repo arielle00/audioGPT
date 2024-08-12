@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import FileSave
-from .models import ProfileSave, CustomProfile
+from .models import CustomProfile
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 
@@ -10,15 +10,15 @@ class FileSerializer(serializers.ModelSerializer):
         model = FileSave
         fields = ('audio_name', 'audio_file')
 
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProfileSave
-        fields = ('username', 'email', 'password', 'apikey')
+# class ProfileSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ProfileSave
+#         fields = ('username', 'email', 'password', 'apikey')
 
 class CustomProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomProfile
-        fields = ('username', 'password', 'email', 'apikey')
+        fields = ('username', 'password', 'email', 'apikey', 'langchainkey')
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.CharField()
