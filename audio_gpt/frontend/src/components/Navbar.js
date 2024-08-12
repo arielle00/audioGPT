@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
@@ -17,7 +19,36 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   </a>
 ));
 
+
+
+
 export default function Navbar() {
+  const navigate = useNavigate();
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+         
+          try {
+              const response = await fetch('/api/logout', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(),
+              });
+  
+              if (response.ok) {
+                  const data = await response.json();
+                  console.log(data);
+                  navigate('/');
+              } else {
+                  console.log(response)
+                  console.error('Error logging out data');
+              }
+          } catch (error) {
+              console.error('Error:', error);
+          }
+  }
   return (
     <nav className="bg-[#333] fixed top-0 left-0 w-full z-10 h-16">
       <div className="flex justify-between items-center p-4 h-full">
@@ -37,7 +68,7 @@ export default function Navbar() {
             <Dropdown.Menu>
               <Dropdown.Item href="/profile">Profile</Dropdown.Item>
               <Dropdown.Item href="/settings">Settings</Dropdown.Item>
-              <Dropdown.Item href="/logout">Logout</Dropdown.Item>
+              <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>

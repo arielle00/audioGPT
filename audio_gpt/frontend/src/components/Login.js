@@ -52,13 +52,13 @@ function Login() {
             // Start the fade-out after 1.5 seconds
             const timer1 = setTimeout(() => {
                 setFadeOut(true);
-            }, 1500);
+            }, 10000);
 
             // Remove the message from the DOM after the fade-out transition (e.g., 1 second later)
             const timer2 = setTimeout(() => {
                 setShowMessage(false);
                 setLoginFailed(false);
-            }, 1500); // 1500ms + 1000ms (transition duration)
+            }, 10000); // 1500ms + 1000ms (transition duration)
 
             // Clean up the timers on component unmount or when loginFailed changes
             return () => {

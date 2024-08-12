@@ -9,7 +9,7 @@ from rest_framework.authtoken.models import Token
 from .serializers import  FileSerializer
 from .serializers import  ProfileSerializer, CustomProfileSerializer, LoginSerializer
 from .models import ProfileSave
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -206,3 +206,9 @@ class Login(APIView):
                 'email': user.email
             }, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class Logout(APIView):
+    def post(self, request):
+        print(request)
+        logout(request)
+        return Response({"ok":True}, status=status.HTTP_200_OK)
