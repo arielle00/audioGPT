@@ -47,13 +47,14 @@ load_dotenv()
 class AudioFileView(APIView):
     authentication_classes = [TokenAuthentication]
     serializer_class = FileSerializer
-
+    
     def post(self, request, format=None):
+        
         def get_postgresql_connection_string():
             db_settings = settings.DATABASES['default']
             return f"postgresql+psycopg2://{db_settings['USER']}:{db_settings['PASSWORD']}@{db_settings['HOST']}:{db_settings['PORT']}/{db_settings['NAME']}"
         data = request.data
-        
+
         user = request.user
         openai_api_key = user.apikey
         encrypted_api_key_bytes = openai_api_key.encode('utf-8')
@@ -87,7 +88,6 @@ class AudioFileView(APIView):
             text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
             splits = text_splitter.split_documents(docs)
         
-
             embeddings = OpenAIEmbeddings(openai_api_key=decrypted_text)
 
             connection = get_postgresql_connection_string()
