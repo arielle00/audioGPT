@@ -5,6 +5,7 @@ import Chat from './Chat';
 import Layout from './Layout';
 import Login from './Login';
 import Signup from './Signup';
+import Settings from './Settings';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
   { 
     path: 'signup/', 
     element: <Signup /> 
+  },
+  {
+    path: 'settings/',
+    element: <Settings/>
   }
   
 ]);
