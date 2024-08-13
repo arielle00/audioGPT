@@ -7,6 +7,7 @@ import Login from './Login';
 import Signup from './Signup';
 import NoPermission from './NoPermission'
 import {PrivateRoute}  from './Privateroute';
+import Settings from './Settings';
 
 const router = createBrowserRouter([
   {
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
     children: [
       { path: 'chat/', element: <PrivateRoute> <Chat /> </PrivateRoute>},
       { path: '', element: <PrivateRoute><TestHomePage /></PrivateRoute> },
-
+      { path: 'settings/', element: <Settings /> },
     ],
   },
   {

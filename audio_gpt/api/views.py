@@ -213,3 +213,7 @@ class Logout(APIView):
     def post(self, request):
         request.user.auth_token.delete()
         return Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)
+
+
+class Settings(APIView):
+    print("test")
