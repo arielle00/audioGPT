@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     children: [
       { path: 'chat/', element: <PrivateRoute> <Chat /> </PrivateRoute>},
       { path: '', element: <PrivateRoute><TestHomePage /></PrivateRoute> },
-      { path: 'settings/', element: <Settings /> },
+      { path: 'settings/', element: <PrivateRoute><Settings /></PrivateRoute> },
     ],
   },
   {
