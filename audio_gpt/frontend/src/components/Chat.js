@@ -66,7 +66,7 @@ export default function Chat() {
       what you inherently know with the context to give a unique and interesting point of view. If there is no context,
       go based off what you know inherently. Please end by saying "Hopefully this answers your question!"`)
   const [currTemplate, setCurrTemplate] = useState("GenericGPT")
-  const [notification, setNotification] = useState({ message: '', color: '' , type:''});
+  const [notification, setNotification] = useState({ message: '', type:''});
   const token =  localStorage.getItem('authToken');
 
   const addMessage = (newMessage) => {
@@ -117,7 +117,7 @@ export default function Chat() {
       } else {
         console.error('Error submitting data');
         setErrorKey(true)
-        setNotification({ message: 'Invalid OpenAI Key', color: 'red', type:'error' });
+        setNotification({ message: 'Invalid OpenAI Key', type:'error' });
       }
     } catch (error) {
       console.error('Error:', error);
@@ -132,19 +132,14 @@ export default function Chat() {
   }
 
   return (
-
-      <div className="justify-center flex flex-col inset-0 space-x-4 p-4 items-center bg-gray h-screen">
-        {notification.type==='error' && (
-              <div className="fixed bg-${notification.color}-500 flex text-white p-2 rounded-lg shadow-lg transition-opacity duration-500 opacity-100">
+      <div className="justify-center flex flex-col items-center bg-gray h-screen">
+        {(notification.type === 'error' || notification.type === 'modal') && (
+              <div
+              className={`fixed flex text-white p-2 rounded-lg shadow-lg transition-opacity duration-500 opacity-100 ${notification.type === 'error' ? 'bg-red-500' : 'bg-green-500'} `}>
                 {notification.message}
               </div>
         )}
-        {/* {notification.type==='modal' && (
-              <div className="fixed bg-${notification.color}-500 flex text-white p-2 rounded-lg shadow-lg transition-opacity duration-500 opacity-100">
-                {notification.message}
-              </div>
-        )} */}
-        <div className="center flex flex-col bg-vanilla rounded-lg shadow-md mt-9 p-4 w-3/4 h-[80vh]">
+        <div className="center flex flex-col bg-vanilla rounded-lg shadow-md mt-14 p-4 w-3/4 h-[80vh]">
           <div className="flex flex-row justify-between items-center">
             <Clear onClick={clearChat} className=" w-15 h-15" />
             <h3 className="text-lg font-semibold">CHAT MESSAGES</h3>
@@ -175,7 +170,7 @@ export default function Chat() {
           onSelect={(sysPrompt, name) => {
             setCurrTemplate(name);
             setSysPrompt(sysPrompt);
-            setNotification({message:'Template "${name}" has been selected!', color:'green', type:'modal'});
+            setNotification({ message: `Template "${name}" has been selected!`, type: 'modal' });
             setTimeout(() => setNotification(""), 2000);
           }}
         />

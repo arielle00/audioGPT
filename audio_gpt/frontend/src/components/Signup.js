@@ -1,5 +1,5 @@
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
 
 
 const signupFields=[
@@ -56,7 +56,11 @@ const signupFields=[
 ];
 
 function Signup() {
+
     const navigate = useNavigate();
+    const [Duplicate, setDuplicate] = useState(false);
+    const [showMessage, setShowMessage] = useState(false);
+    const [fadeOut, setFadeOut] = useState(false);
 
     const [signupState, setSignupState]=useState({
         username: "",
@@ -66,6 +70,35 @@ function Signup() {
         langchainkey: "",
 
     });
+
+    useEffect(() => {
+        if (Duplicate) {
+            setShowMessage(true);
+            setFadeOut(false);
+
+            // Start the fade-out after 1.5 seconds
+            const timer1 = setTimeout(() => {
+                setFadeOut(true);
+            }, 2000);
+
+            // Remove the message from the DOM after the fade-out transition (e.g., 1 second later)
+            const timer2 = setTimeout(() => {
+                setShowMessage(false);
+                setLoginFailed(false);
+            }, 2000); // 1500ms + 1000ms (transition duration)
+
+            // Clean up the timers on component unmount or when loginFailed changes
+            return () => {
+                clearTimeout(timer1);
+                clearTimeout(timer2);
+            };
+        } else {
+            // Reset the message display if login is successful
+            setShowMessage(false);
+            setFadeOut(false);
+        }
+    }, [Duplicate]);
+
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -78,7 +111,6 @@ function Signup() {
    
     const handleSubmit= async (e) =>{
         e.preventDefault();
-        navigate('/')
         
         const signupData = {
             username: signupState.username,  // Assuming you want to send the username, adjust if needed
@@ -99,9 +131,10 @@ function Signup() {
       
             if (response.ok) {
               const data = await response.json();
-              console.log(data);
+              navigate('/')
             } else {
               console.error('Error submitting data');
+              setDuplicate(true);
             }
         } 
         catch (error) {
@@ -148,6 +181,32 @@ function Signup() {
                     Signup
                 </button>
             </form>
+            <div className="h-8 mt-4">
+                {Duplicate && (
+                    <div className={`flex items-center px-4 p-3 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 transition-opacity duration-1000 ${fadeOut ? 'opacity-0' : 'opacity-100'}`} role="alert">
+                        <svg
+                            className="flex-shrink-0 inline w-4 h-4 me-3"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                        >
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                        </svg>
+                        <span className="sr-only">Info</span>
+                        <div>
+                            <span className="font-medium">Email already in use.</span>
+                        </div>
+                    </div>
+                )}
+            </div>
+            <div className="flex justify-center items-center mt-10">
+                <a href="/"
+                    className="font-medium text-blue-700 hover:underline"
+                >
+                    Click here to log in
+                </a>
+            </div>
         </div>
     );
 }

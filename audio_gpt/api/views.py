@@ -194,9 +194,9 @@ class Login(APIView):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data['user']
-            print(request.user.is_authenticated)
+            # print(request.user.is_authenticated)
             login(request, user)
-            print(request.user.is_authenticated)
+            # print(request.user.is_authenticated)
             
             # Generate or get an existing token for the user
             token, created = Token.objects.get_or_create(user=user)

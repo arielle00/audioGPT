@@ -9,16 +9,11 @@ class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = FileSave
         fields = ('audio_name', 'audio_file')
-
-# class ProfileSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = ProfileSave
-#         fields = ('username', 'email', 'password', 'apikey')
-
 class CustomProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomProfile
         fields = ('username', 'password', 'email', 'apikey', 'langchainkey')
+
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.CharField()
