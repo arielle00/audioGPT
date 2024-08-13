@@ -5,14 +5,17 @@ import Chat from './Chat';
 import Layout from './Layout';
 import Login from './Login';
 import Signup from './Signup';
+import NoPermission from './NoPermission'
+import {PrivateRoute}  from './Privateroute';
 
 const router = createBrowserRouter([
   {
     path: 'home/',
-    element: <Layout />,
+    element: <PrivateRoute><Layout /></PrivateRoute>,
     children: [
-      { path: 'chat/', element: <Chat /> },
-      { path: '', element: <TestHomePage /> },
+      { path: 'chat/', element: <PrivateRoute> <Chat /> </PrivateRoute>},
+      { path: '', element: <PrivateRoute><TestHomePage /></PrivateRoute> },
+
     ],
   },
   {
@@ -21,8 +24,13 @@ const router = createBrowserRouter([
   },
   { 
     path: 'signup/', 
+    
     element: <Signup /> 
-  }
+  },
+  {
+    path: 'permissionDenied/',
+    element: <NoPermission/>
+  },
   
 ]);
 
