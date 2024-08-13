@@ -7,5 +7,5 @@ urlpatterns = [
     path('home/chat/',index),
     path('home/', index),
     path('signup/', index),
-    path('settings/', index),
+    path('home/settings/', index),
 ]

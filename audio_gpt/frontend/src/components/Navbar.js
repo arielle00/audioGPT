@@ -63,18 +63,27 @@ export default function Navbar() {
             <a href="/home/chat" className="block text-[#f2f2f2] text-center px-4 py-3.5 no-underline hover:bg-[#ddd] hover:text-black">Chat</a>
           </li>
         </ul>
+
+
         <div className="relative">
           <Dropdown>
             <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
               <i className="fas fa-user" style={{ fontSize: '24px' }}></i>
             </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item href="/profile">Profile</Dropdown.Item>
-              <Dropdown.Item href="/settings">Settings</Dropdown.Item>
-              <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+            <Dropdown.Menu className="absolute right-0 mt-2 w-48 bg-vanilla rounded-lg shadow-lg">
+              <Dropdown.Item className="px-4 py-2 hover:bg-gray-200 rounded-t-lg" href="/profile">
+                Profile
+              </Dropdown.Item>
+              <Dropdown.Item className="px-4 py-2 hover:bg-gray-200" href="/home/settings">
+                Settings
+              </Dropdown.Item>
+              <Dropdown.Item className="px-4 py-2 hover:bg-gray-200 rounded-b-lg" onClick={handleLogout}>
+                Logout
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>
+
       </div>
     </nav>
   );

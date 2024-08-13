@@ -14,6 +14,7 @@ const router = createBrowserRouter([
     children: [
       { path: 'chat/', element: <Chat /> },
       { path: '', element: <TestHomePage /> },
+      { path: 'settings/', element: <Settings /> },
     ],
   },
   {
@@ -24,11 +25,6 @@ const router = createBrowserRouter([
     path: 'signup/', 
     element: <Signup /> 
   },
-  {
-    path: 'settings/',
-    element: <Settings/>
-  }
-  
 ]);
 
 const App = () => {

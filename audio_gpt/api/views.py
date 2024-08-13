@@ -215,5 +215,5 @@ class Logout(APIView):
         return Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)
 
 
-# class Settings(APIView):
-#     print("test")
+class Settings(APIView):
+    print("test")
