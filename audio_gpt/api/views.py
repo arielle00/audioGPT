@@ -1,11 +1,10 @@
 from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-import hashlib
 from cryptography.fernet import Fernet
+import uuid
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
-# from django.http import HttpResponse
 from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
 from .serializers import  FileSerializer
@@ -53,7 +52,13 @@ class AudioFileView(APIView):
         def get_postgresql_connection_string():
             db_settings = settings.DATABASES['default']
             return f"postgresql+psycopg2://{db_settings['USER']}:{db_settings['PASSWORD']}@{db_settings['HOST']}:{db_settings['PORT']}/{db_settings['NAME']}"
-        data = request.data.copy()
+        data = request.data
+        
+        user = request.user
+        openai_api_key = user.apikey
+        encrypted_api_key_bytes = openai_api_key.encode('utf-8')
+        decrypted_data = fernet.decrypt(encrypted_api_key_bytes)
+        decrypted_text = decrypted_data.decode('utf-8')
         audiofile = request.FILES['audio_file']
         serializer = self.serializer_class(data=request.data)
         
@@ -81,8 +86,9 @@ class AudioFileView(APIView):
             docs = loader.load()
             text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
             splits = text_splitter.split_documents(docs)
+        
 
-            embeddings = OpenAIEmbeddings()
+            embeddings = OpenAIEmbeddings(openai_api_key=decrypted_text)
 
             connection = get_postgresql_connection_string()
             COLLECTION_NAME = audio_name

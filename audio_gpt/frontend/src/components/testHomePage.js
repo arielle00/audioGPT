@@ -40,6 +40,7 @@ function TestHomePage() {
         console.log(percentCompleted);
       },
       headers: {
+        "Authorization": `Token ${token}`,
         "Content-Type": "multipart/form-data",
       }
     })
