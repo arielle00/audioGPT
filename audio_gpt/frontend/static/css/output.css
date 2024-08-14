@@ -743,6 +743,10 @@ video {
   height: 100vh;
 }
 
+.h-auto {
+  height: auto;
+}
+
 .min-h-screen {
   min-height: 100vh;
 }
@@ -1084,6 +1088,10 @@ video {
   padding-bottom: 1.25rem;
 }
 
+.pb-10 {
+  padding-bottom: 2.5rem;
+}
+
 .text-center {
   text-align: center;
 }
@@ -1196,6 +1204,11 @@ video {
 .text-\[\#5C4033\] {
   --tw-text-opacity: 1;
   color: rgb(92 64 51 / var(--tw-text-opacity));
+}
+
+.text-brown {
+  --tw-text-opacity: 1;
+  color: rgb(141 103 86 / var(--tw-text-opacity));
 }
 
 .underline {

@@ -72,7 +72,7 @@ function Settings() {
     return(
         <div className="flex text-white flex-col items-center justify-center text-6xl bg-gray h-screen">
             
-            <h1 className="text-3xl pt-36 font-bold"> Settings </h1>
+            <h1 className="text-3xl pb-10 pt-36 text-gray-600 font-bold"> Settings </h1>
             <form className="mt-8 space-y-6" onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '400px' }}>
                 <div className="space-y-2">
                     {settingsFields.map((field) => (

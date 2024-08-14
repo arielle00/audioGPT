@@ -152,7 +152,7 @@ function Signup() {
                 </p> 
             </div>
 
-            <h1 className="text-3xl pt-36 font-bold">Sign up</h1>
+            <h1 className="text-3xl pt-36 text-gray-600 font-bold">Sign up</h1>
             <form className="mt-8 space-y-6" onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '400px' }}>
                 <div className="space-y-2">
                     {signupFields.map((field) => (

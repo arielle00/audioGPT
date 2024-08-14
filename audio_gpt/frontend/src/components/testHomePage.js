@@ -84,6 +84,8 @@ function TestHomePage() {
           {error && <p className="mt-2 text-red-600">{error}</p>}
         </div>
       </div>
+      
+      <img src="/Users/arielle/Desktop/audioGPT/audio_gpt/frontend/static/frontend/static/images/logo.png" alt="Description of the image" class="w-full h-auto" />
     </div>
   );
 }
