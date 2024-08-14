@@ -58,15 +58,15 @@ function TestHomePage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-200">
-      <div className="flex justify-center items-center pt-28 py-10 bg-gray">
+      {/* <div className="flex justify-center items-center pt-28 py-10 bg-gray">
         <p className="underline decoration-wavy text-raisin normal-case font-mono font-bold text-5xl bg-gray">
           AudioGPT
         </p> 
-      </div>
+      </div> */}
 
-      <img src={logo} alt="Description of the image" class="flex justify-center items-center w-36 bg-gray h-36" />
+      <div className="flex flex-col justify-center items-center flex-1 bg-gray">
+        <img src={logo} alt="Description of the image" className="w-96 h-96" />
       
-      <div className="flex justify-center items-center flex-1 bg-gray">
         <div className="outline-dashed p-8 bg-vanilla rounded-lg shadow-md w-130">
           <h1 className="text-2xl font-bold mb-4">Please Upload Your Audio File (mp3)</h1>
           <div className="flex flex-row items-center space-x-2">

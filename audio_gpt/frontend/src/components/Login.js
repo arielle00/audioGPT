@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
+import logo from "../../static/frontend/static/images/logo.png";
 
 const loginFields = [
     {
@@ -109,12 +110,10 @@ function Login() {
     return (
         <div className="bg-gray text-white flex flex-col items-center justify-center h-screen">
             <div className="flex justify-center items-center bg-gray">
-                <p className="underline decoration-wavy text-raisin normal-case font-mono font-bold text-5xl bg-gray">
-                    AudioGPT
-                </p> 
+                <img src={logo} alt="Description of the image" className="w-96 h-96" />
             </div>
             
-            <h1 className="text-3xl text-gray-600 pt-36 font-bold">Log in</h1>
+            <h1 className="text-3xl text-gray-600 font-bold">Log in</h1>
             <form className="mt-8 space-y-6" onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '400px' }}>
                 <div className="space-y-2">
                     {loginFields.map((field) => (
