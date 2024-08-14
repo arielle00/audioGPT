@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import logo from '/Users/arielle/Desktop/audioGPT/audio_gpt/frontend/static/frontend/static/images/logo.png';
 
 
 function TestHomePage() {
@@ -62,6 +63,8 @@ function TestHomePage() {
           AudioGPT
         </p> 
       </div>
+
+      <img src={logo} alt="Description of the image" class="flex justify-center items-center w-36 bg-gray h-36" />
       
       <div className="flex justify-center items-center flex-1 bg-gray">
         <div className="outline-dashed p-8 bg-vanilla rounded-lg shadow-md w-130">
@@ -84,8 +87,7 @@ function TestHomePage() {
           {error && <p className="mt-2 text-red-600">{error}</p>}
         </div>
       </div>
-      
-      <img src="/Users/arielle/Desktop/audioGPT/audio_gpt/frontend/static/frontend/static/images/logo.png" alt="Description of the image" class="w-full h-auto" />
+
     </div>
   );
 }
