@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import logo from '/Users/arielle/Desktop/audioGPT/audio_gpt/frontend/static/frontend/static/images/logo.png';
+import logo from "../../static/frontend/static/images/logo.png";
 
 
 function TestHomePage() {
