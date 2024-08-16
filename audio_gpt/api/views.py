@@ -69,7 +69,7 @@ class AudioFileView(APIView):
         if serializer.is_valid():
             audio_name = data.get('audio_name')
             audio_file = data.get('audio_file')
-
+ 
             aai.settings.api_key = os.getenv('ASSEMBLYAI_API_KEY')
             transcriber = aai.Transcriber()
             transcript = transcriber.transcribe(audio_file)
@@ -91,7 +91,7 @@ class AudioFileView(APIView):
             embeddings = OpenAIEmbeddings(openai_api_key=decrypted_text)
 
             connection = get_postgresql_connection_string()
-            COLLECTION_NAME = audio_name
+            COLLECTION_NAME = user.email
             db = PGVector(embeddings=embeddings, collection_name=COLLECTION_NAME, connection=connection, use_jsonb=True)
             db.add_documents(splits)
 
@@ -117,7 +117,7 @@ class MessageView(APIView):
 
         llm = ChatOpenAI(model_name=model_name, temperature=0, openai_api_key=decrypted_text)
         connection = get_postgresql_connection_string()
-        COLLECTION_NAME = "my_audio"
+        COLLECTION_NAME = user.email
         embeddings = OpenAIEmbeddings(openai_api_key=decrypted_text)
         prompt = hub.pull("rlm/rag-prompt")
         db = PGVector(embeddings=embeddings, collection_name=COLLECTION_NAME, connection=connection, use_jsonb=True)
