@@ -14,11 +14,11 @@ const settingsFields=[{
 },
 {
     labelText:"Password Reset",
-    labelFor:"pass-reset",
-    id:"pass-reset",
-    name:"pass-reset",
+    labelFor:"password",
+    id:"password",
+    name:"password",
     type:"text",
-    autoComplete:"pass-reset",
+    autoComplete:"password",
     isRequired:true,
     placeholder:"Password Reset",
     text: "Password Reset"   
@@ -26,6 +26,8 @@ const settingsFields=[{
 
 
 function Settings() {
+    const token =  localStorage.getItem('authToken');
+    const [notification, setNotification] = useState({ message: ''});
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -40,24 +42,30 @@ function Settings() {
         password: "",
     });
 
+    const changePassData = {password: settingsState.password,}
+    const changeKeyData = {apikey: settingsState.apikey,}
+
     const handleClick = async (text) => {
 
-        
-        const changePassData = {password: settingsState.password,}
-        const changeKeyData = {apikey: settingsState.apikey,}
-
         if (text === 'Password Reset') {
+            console.log("testing")
             try {
                 const response = await fetch('/api/changePass', {
                   method: 'POST',
                   headers: {
+                    'Authorization': `Token ${token}`,
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify(changePassData),
                 });
           
                 if (response.ok) {
-                  
+                    setSettingsState(prevState => ({
+                        ...prevState,
+                        password: "" // Reset the password field
+                    }));
+                    setNotification({ message: 'Password changed'});
+                    setTimeout(() => setNotification(""), 2500);
                 } else {
                   console.error('Error submitting data');
                 }
@@ -72,12 +80,19 @@ function Settings() {
                 const response = await fetch('/api/changeKey', {
                   method: 'POST',
                   headers: {
+                    'Authorization': `Token ${token}`,
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify(changeKeyData),
                 });
           
                 if (response.ok) {
+                    setSettingsState(prevState => ({
+                        ...prevState,
+                        apikey: "" 
+                    }));
+                    setNotification({ message: 'API Key changed'});
+                    setTimeout(() => setNotification(""), 2500);
                   
                 } else {
                   console.error('Error submitting data');
@@ -128,6 +143,14 @@ function Settings() {
                         
                     ))}
                 </div>
+                
+                {(notification.message ==='Password changed' || notification.message ==='API Key changed') && (
+                    <div
+                    className={`fixed flex text-white p-2 rounded-lg shadow-lg transition-opacity duration-500 opacity-100 bg-green-500`}>
+                        {notification.message}
+                    </div>
+                )}
+
             </div>
         </div>
     )

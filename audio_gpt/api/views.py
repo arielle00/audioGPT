@@ -225,12 +225,25 @@ class Settings(APIView):
     print("test")
 
 class ChangeKey(APIView):
+    authentication_classes = [TokenAuthentication]
     def post(self, request):
-        print("t4st")
+        user = request.user
+        new_api_key = request.data.get('apikey')
+        encAPIKey = fernet.encrypt(new_api_key.encode()).decode()
+        user.apikey = encAPIKey
+        user.save()
         return Response({"message": "Changed API Key successfully"}, status=status.HTTP_200_OK)
 
 class ChangePass(APIView):
+    authentication_classes = [TokenAuthentication]
     def post(self, request):
-        print("test")
-        return Response({"message": "Changed password successfully"}, status=status.HTTP_200_OK)
+        try :
+            user = request.user
+            new_password = request.data.get('password')
+            user.set_password(new_password)
+            user.save() 
+            return Response({"message": "Changed password successfully"}, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({"error": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
