@@ -223,3 +223,14 @@ class Logout(APIView):
 
 class Settings(APIView):
     print("test")
+
+class ChangeKey(APIView):
+    def post(self, request):
+        print("t4st")
+        return Response({"message": "Changed API Key successfully"}, status=status.HTTP_200_OK)
+
+class ChangePass(APIView):
+    def post(self, request):
+        print("test")
+        return Response({"message": "Changed password successfully"}, status=status.HTTP_200_OK)
+
