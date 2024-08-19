@@ -22,6 +22,17 @@ const settingsFields=[{
     isRequired:true,
     placeholder:"Password Reset",
     text: "Password Reset"   
+},
+{
+    labelText:"Langchain Key",
+    labelFor:"langchainkey",
+    id:"langchainkey",
+    name:"langchainkey",
+    type:"text",
+    autoComplete:"langchainkey",
+    isRequired:true,
+    placeholder:"Langchain Key",
+    text: "Langchain Key"   
 },]
 
 
@@ -44,11 +55,11 @@ function Settings() {
 
     const changePassData = {password: settingsState.password,}
     const changeKeyData = {apikey: settingsState.apikey,}
+    const changeLangchainData = {langchainkey: settingsState.langchainkey,}
 
     const handleClick = async (text) => {
 
         if (text === 'Password Reset') {
-            console.log("testing")
             try {
                 const response = await fetch('/api/changePass', {
                   method: 'POST',
@@ -75,7 +86,7 @@ function Settings() {
             }
         } 
         
-        else {
+        else if (text==="API Key Reset"){
             try {
                 const response = await fetch('/api/changeKey', {
                   method: 'POST',
@@ -92,6 +103,33 @@ function Settings() {
                         apikey: "" 
                     }));
                     setNotification({ message: 'API Key changed'});
+                    setTimeout(() => setNotification(""), 2500);
+                  
+                } else {
+                  console.error('Error submitting data');
+                }
+            } 
+            catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        else {
+            try {
+                const response = await fetch('/api/changeLangchain', {
+                  method: 'POST',
+                  headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(changeLangchainData),
+                });
+          
+                if (response.ok) {
+                    setSettingsState(prevState => ({
+                        ...prevState,
+                        langchainkey: "" 
+                    }));
+                    setNotification({ message: 'Langchain Key changed'});
                     setTimeout(() => setNotification(""), 2500);
                   
                 } else {
@@ -144,7 +182,7 @@ function Settings() {
                     ))}
                 </div>
                 
-                {(notification.message ==='Password changed' || notification.message ==='API Key changed') && (
+                {(notification.message ==='Password changed' || notification.message ==='API Key changed' || notification.message ==='Langchain Key changed') && (
                     <div
                     className={`fixed flex text-white p-2 rounded-lg shadow-lg transition-opacity duration-500 opacity-100 bg-green-500`}>
                         {notification.message}

@@ -40,10 +40,10 @@ from io import BytesIO
 fernet_key = os.getenv('FERNET_KEY')
 fernet = Fernet(fernet_key)
 
-langchain_api_key = os.getenv('LANGCHAIN_API_KEY', 'default_langchain_key')
+# langchain_api_key = os.getenv('LANGCHAIN_API_KEY', 'default_langchain_key')
 
 model_name = "gpt-3.5-turbo"
-os.environ['LANGCHAIN_API_KEY'] = langchain_api_key
+# os.environ['LANGCHAIN_API_KEY'] = langchain_api_key
 
 load_dotenv()
 class AudioFileView(APIView):
@@ -241,6 +241,17 @@ class ChangeKey(APIView):
         user.apikey = encAPIKey
         user.save()
         return Response({"message": "Changed API Key successfully"}, status=status.HTTP_200_OK)
+
+class ChangeLangchain(APIView):
+    authentication_classes = [TokenAuthentication]
+    def post(self, request):
+        user = request.user
+        new_langchain_api_key = request.data.get('langchainkey')
+        encAPIKey = fernet.encrypt(new_langchain_api_key.encode()).decode()
+        user.langchainkey = encAPIKey
+        user.save()
+        return Response({"message": "Changed Lanchain Key successfully"}, status=status.HTTP_200_OK)
+
 
 class ChangePass(APIView):
     authentication_classes = [TokenAuthentication]
