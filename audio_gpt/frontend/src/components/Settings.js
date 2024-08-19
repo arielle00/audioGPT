@@ -106,43 +106,43 @@ function Settings() {
     const fixedInputClass = "bg-vanilla appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-brown focus:border-brown focus:z-10 sm:text-sm ";
 
     return (
-        <div className="bg-gray text-white flex flex-col items-center justify-start p-4 pt-20"> {/* Removed min-h-screen */}
-            <h1 className="text-3xl pb-4 text-gray-600 font-bold">Settings</h1>
-            <div className="space-y-6 w-full max-w-md">
-                {settingsFields.map((field) => (
-                    <div key={field.id} className="space-y-2">
-                        <div className="text-raisin text-xl mb-1">{field.text}:</div>
-                        <label htmlFor={field.id} className="sr-only">
-                            {field.labelText}
-                        </label>
-                        <input
-                            onChange={handleChange}
-                            value={settingsState[field.name]}
-                            id={field.id}
-                            name={field.name}
-                            type={field.type}
-                            required={field.isRequired}
-                            className={fixedInputClass}
-                            placeholder={field.placeholder}
-                        />
-                        <button
-                            type="submit"
-                            className="group bg-brown w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white hover:bg-raisin focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amythest mt-2"
-                            onClick={() => handleClick(field.text)}
-                        >
-                            {field.text}
-                        </button>
-                    </div>
-                ))}
-                {notification.message && (
-                    <div
-                        className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white p-2 rounded-lg shadow-lg transition-opacity duration-500"
-                    >
-                        {notification.message}
-                    </div>
-                )}
+        <div className="bg-gray text-white flex flex-col items-center justify-start p-4 min-h-screen">
+    <h1 className="text-3xl pb-4 text-gray-600 font-bold mt-20">Settings</h1>
+    <div className="space-y-6 w-full max-w-md">
+        {settingsFields.map((field) => (
+            <div key={field.id} className="space-y-2">
+                <div className="text-raisin text-xl mb-1">{field.text}:</div>
+                <label htmlFor={field.id} className="sr-only">
+                    {field.labelText}
+                </label>
+                <input
+                    onChange={handleChange}
+                    value={settingsState[field.name]}
+                    id={field.id}
+                    name={field.name}
+                    type={field.type}
+                    required={field.isRequired}
+                    className={fixedInputClass}
+                    placeholder={field.placeholder}
+                />
+                <button
+                    type="submit"
+                    className="group bg-brown w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white hover:bg-raisin focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amythest mt-2"
+                    onClick={() => handleClick(field.text)}
+                >
+                    {field.text}
+                </button>
             </div>
-        </div>
+        ))}
+        {notification.message && (
+            <div
+                className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white p-2 rounded-lg shadow-lg transition-opacity duration-500"
+            >
+                {notification.message}
+            </div>
+        )}
+    </div>
+</div>
     );
 }
 
