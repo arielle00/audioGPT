@@ -33,6 +33,8 @@ import assemblyai as aai
 from langchain_postgres.vectorstores import PGVector
 from langchain_core.document_loaders import BaseLoader
 from langchain.schema import Document
+from openai import OpenAI
+from io import BytesIO
 
 
 fernet_key = os.getenv('FERNET_KEY')
@@ -70,9 +72,15 @@ class AudioFileView(APIView):
             audio_name = data.get('audio_name')
             audio_file = data.get('audio_file')
  
-            aai.settings.api_key = os.getenv('ASSEMBLYAI_API_KEY')
-            transcriber = aai.Transcriber()
-            transcript = transcriber.transcribe(audio_file)
+            client = OpenAI(api_key=decrypted_text)
+            audio_bytes = audio_file.read()
+            audio_stream = BytesIO(audio_bytes)
+            audio_stream.name = "audio_name.mp3"
+            # Passing the file directly to the OpenAI API
+            transcript = client.audio.transcriptions.create(
+                model="whisper-1",
+                file=(audio_stream)  # Directly pass the InMemoryUploadedFile
+            )
 
             class StringDocumentLoader(BaseLoader):
                 def __init__(self, text: str):
