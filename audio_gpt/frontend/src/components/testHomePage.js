@@ -2,23 +2,20 @@ import React, { useState } from "react";
 import axios from "axios";
 import logo from "../../static/frontend/static/images/logo.png";
 
-
 function TestHomePage() {
-  const token =  localStorage.getItem('authToken');
+  const token = localStorage.getItem('authToken');
   const [file, setFile] = useState(null);
   const [progress, setProgress] = useState({ started: false, pc: 0 });
   const [msg, setMsg] = useState(null);
-  const [error, setError] = useState();
+  const [error, setError] = useState('');
   const audioName = "my_audio";
 
   function handleUpload() {
-    
     if (!file) {
-      console.log("No file selected");
+      setError("No file selected");
       return;
     }
 
-    // Check if the file is an audio file by checking its MIME type
     if (file.type.startsWith('audio/')) {
       setError('');
     } else {
@@ -31,9 +28,7 @@ function TestHomePage() {
     fd.append('audio_name', audioName);
 
     setMsg("Uploading...");
-    setProgress((prevState) => {
-      return { ...prevState, started: true };
-    });
+    setProgress({ started: true, pc: 0 });
 
     axios.post('/api/add-audio', fd, {
       onUploadProgress: (progressEvent) => {
@@ -57,37 +52,29 @@ function TestHomePage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-200">
-      {/* <div className="flex justify-center items-center pt-28 py-10 bg-gray">
-        <p className="underline decoration-wavy text-raisin normal-case font-mono font-bold text-5xl bg-gray">
-          AudioGPT
-        </p> 
-      </div> */}
-
-      <div className="flex flex-col justify-center items-center flex-1 bg-gray">
-        <img src={logo} alt="Description of the image" className="w-96 h-96" />
+    <div className="flex flex-col justify-center items-center min-h-screen bg-gray px-4 pt-20"> {/* Added pt-20 for padding */}
+      <img src={logo} alt="Description of the image" className="w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 mb-8" />
       
-        <div className="outline-dashed p-8 bg-vanilla rounded-lg shadow-md w-130">
-          <h1 className="text-2xl font-bold mb-4">Please Upload Your Audio File (mp3)</h1>
-          <div className="flex flex-row items-center space-x-2">
-            <input
-              className="p-2 border border-gray-300 bg-white rounded-full file:rounded-full"
-              onChange={(e) => { setFile(e.target.files[0]) }}
-              type="file"
-            />
-            <button
-              className="bg-brown text-white px-4 py-2 rounded-lg hover:bg-raisin"
-              onClick={handleUpload}
-            >
-              Upload
-            </button>
-          </div>
-          {msg && <p className="mt-4 text-green-600">{msg}</p>}
-          {progress.started && <p className="mt-2">Progress: {progress.pc}%</p>}
-          {error && <p className="mt-2 text-red-600">{error}</p>}
+      <div className="outline-dashed p-8 bg-vanilla rounded-lg shadow-md w-full max-w-md">
+        <h1 className="text-2xl font-bold mb-4 text-center">Please Upload Your Audio File (mp3)</h1>
+        <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+          <input
+            className="p-2 border border-gray-300 bg-white rounded-lg w-full sm:w-auto"
+            onChange={(e) => { setFile(e.target.files[0]) }}
+            type="file"
+            accept="audio/*"
+          />
+          <button
+            className="bg-brown text-white px-4 py-2 rounded-lg hover:bg-raisin w-full sm:w-auto"
+            onClick={handleUpload}
+          >
+            Upload
+          </button>
         </div>
+        {msg && <p className="mt-4 text-green-600 text-center">{msg}</p>}
+        {progress.started && <p className="mt-2 text-center">Progress: {progress.pc}%</p>}
+        {error && <p className="mt-2 text-red-600 text-center">{error}</p>}
       </div>
-
     </div>
   );
 }
