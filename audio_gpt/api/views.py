@@ -229,9 +229,6 @@ class Logout(APIView):
         return Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)
 
 
-class Settings(APIView):
-    print("test")
-
 class ChangeKey(APIView):
     authentication_classes = [TokenAuthentication]
     def post(self, request):

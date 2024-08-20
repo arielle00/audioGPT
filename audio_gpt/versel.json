@@ -1,0 +1,15 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "audio_gpt/audio_gpt/wsgi.py",
+        "use": "@vercel/python"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/login",
+        "dest": "audio_gpt/audio_gpt/wsgi.py"
+      }
+    ]
+  }

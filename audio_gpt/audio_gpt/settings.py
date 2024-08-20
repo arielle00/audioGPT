@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
 # OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
@@ -35,7 +36,7 @@ SECRET_KEY = 'django-insecure-=6ce^lhnbwf-z$&(4wlz^qewvzes0t^jsq^2gbhdy09kg5p-=7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", ".vercel.app", ".now.sh"]
 
 AUTHENTICATION_BACKENDS = [
     'api.backends.EmailBackend',
@@ -157,7 +158,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
