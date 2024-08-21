@@ -6,7 +6,7 @@ import Layout from './Layout';
 import Login from './Login';
 import Signup from './Signup';
 import NoPermission from './NoPermission'
-import {PrivateRoute}  from './Privateroute';
+import PrivateRoute  from './PrivateRoute';
 import Settings from './Settings';
 
 const router = createBrowserRouter([
