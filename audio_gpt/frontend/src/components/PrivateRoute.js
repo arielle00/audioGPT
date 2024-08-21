@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-export const PrivateRoute = ({ children}) => {
+const PrivateRoute = ({ children}) => {
     const token =  localStorage.getItem('authToken');
         
     if (token ) {
@@ -9,3 +9,5 @@ export const PrivateRoute = ({ children}) => {
       
     return <Navigate to="/permissionDenied" />;
   }
+
+export default PrivateRoute
