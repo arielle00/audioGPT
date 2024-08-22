@@ -2,8 +2,11 @@
     "version": 2,
     "builds": [
       {
-        "src": "audio_gpt/audio_gpt/wsgi.py",
-        "use": "@vercel/python"
+        "src": "package.json",
+        "use": "@vercel/static-build",
+        "config": {
+          "distDir": "audio_gpt/staticfiles"
+        }
       }
     ],
     "routes": [
