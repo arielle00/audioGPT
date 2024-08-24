@@ -5,6 +5,9 @@ import sys
 
 
 def main():
+    project_path = os.path.dirname(os.path.abspath(__file__))
+    sys.path.append(os.path.join(project_path, 'audio_gpt'))
+    
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'audio_gpt.settings')
     try:
@@ -20,3 +23,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
