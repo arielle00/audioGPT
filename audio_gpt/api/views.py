@@ -127,7 +127,7 @@ class MessageView(APIView):
         connection = get_postgresql_connection_string()
         COLLECTION_NAME = user.email
         embeddings = OpenAIEmbeddings(openai_api_key=decrypted_text)
-        prompt = hub.pull("rlm/rag-prompt")
+        # prompt = hub.pull("rlm/rag-prompt")
         db = PGVector(embeddings=embeddings, collection_name=COLLECTION_NAME, connection=connection, use_jsonb=True)
         def format_docs(docs):
             return "\n\n".join(doc.page_content for doc in docs)
