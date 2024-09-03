@@ -36,7 +36,7 @@ SECRET_KEY = 'django-insecure-=6ce^lhnbwf-z$&(4wlz^qewvzes0t^jsq^2gbhdy09kg5p-=7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", ".vercel.app", ".now.sh"]
+ALLOWED_HOSTS = ["127.0.0.1", ".vercel.app", ".now.sh", "localhost"]
 
 AUTHENTICATION_BACKENDS = [
     'api.backends.EmailBackend',

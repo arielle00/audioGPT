@@ -21,7 +21,7 @@ import assemblyai as aai
 from dotenv import load_dotenv
 import os
 from django.contrib.auth import logout
-from decouple import config
+# from decouple import config
 import bs4
 from langchain import hub
 from langchain.text_splitter import RecursiveCharacterTextSplitter
